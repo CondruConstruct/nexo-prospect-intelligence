@@ -8,7 +8,7 @@ This project is prepared for automation but should run in draft/approval mode un
 
 1. Landing page
    - Static site in this folder.
-   - Current form uses temporary `mailto:INSERT_BUSINESS_EMAIL@example.com`.
+   - Current form uses `mailto:condru01@gmail.com` until a proper form endpoint/CRM capture is configured.
    - Replace with a real endpoint before launch.
 
 2. Client prospect tracker
