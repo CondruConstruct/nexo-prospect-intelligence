@@ -1,24 +1,28 @@
-const revealEls = document.querySelectorAll('[data-reveal]');
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (reducedMotion) {
-  revealEls.forEach((el) => el.classList.add('is-visible'));
-} else {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const delay = Number(entry.target.dataset.delay || 0);
-        window.setTimeout(() => entry.target.classList.add('is-visible'), delay);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  revealEls.forEach((el) => observer.observe(el));
-}
-
-const form = document.querySelector('.lead-form');
-if (form) {
-  form.addEventListener('submit', () => {
-    // The public launch should replace mailto with a real form endpoint.
-    // This event intentionally does not intercept default behavior.
+const toggle = document.querySelector('.nav-toggle');
+const menu = document.querySelector('.nav-menu');
+if (toggle && menu) {
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
   });
+  menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
 }
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+      setTimeout(() => entry.target.classList.add('revealed'), delay);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+document.querySelectorAll('form.contact-form').forEach((form) => {
+  form.addEventListener('submit', () => {
+    const button = form.querySelector('button[type="submit"]');
+    if (button) button.textContent = 'Sending…';
+  });
+});

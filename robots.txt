@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://condruconstruct.github.io/nexo-prospect-intelligence/sitemap.xml
