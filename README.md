@@ -21,6 +21,15 @@ Static landing page and operating assets for **NEXO**, a service by **NEXOGREX S
 4. Confirm GitHub repository and Pages deployment credentials.
 5. Approve exact outreach list and email templates before sending any external messages.
 6. Add real testimonials only after real customers approve them; do not fabricate social proof.
+7. Start the Telegram bot at https://t.me/AI2004151BOT and send `/start`, then run `python scripts/nexo_telegram.py discover` to save the alert chat.
+8. Gmail OAuth is stored locally at the Hermes token path after authorization; do not commit tokens or `config/*.env` files.
+
+## Automation
+
+- `scripts/nexo_telegram.py` verifies the Telegram bot, discovers the chat ID, and sends alerts.
+- `scripts/google_oauth_setup.py` refreshes/creates Gmail OAuth credentials.
+- `scripts/nexo_gmail_reply_watchdog.py` monitors NEXO-related Gmail replies. It is configured as a Hermes cron job through a wrapper in the Hermes scripts folder.
+- The watchdog is quiet when nothing is new. If a positive NEXO-related reply appears, it sends a safe automatic first response and alerts Telegram when the NEXO chat ID is configured.
 
 ## Local preview
 
