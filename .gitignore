@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store
+Thumbs.db
+logs/
+*.log
+leads/
+exports/
+private/
+*.xlsx
+*.csv
+!ops/nexo_client_prospect_tracker.csv
