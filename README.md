@@ -15,14 +15,12 @@ Static landing page and operating assets for **NEXO**, a service by **NEXOGREX S
 
 ## Important launch TODOs
 
-1. Replace `INSERT_BUSINESS_EMAIL@example.com` in `index.html`, `legal/privacy.html`, and `legal/terms.html`.
-2. Review privacy/terms with a qualified professional before public launch.
-3. Configure real form endpoint or CRM/Google Sheets capture.
-4. Confirm GitHub repository and Pages deployment credentials.
-5. Approve exact outreach list and email templates before sending any external messages.
-6. Add real testimonials only after real customers approve them; do not fabricate social proof.
-7. Start the Telegram bot at https://t.me/AI2004151BOT and send `/start`, then run `python scripts/nexo_telegram.py discover` to save the alert chat.
-8. Gmail OAuth is stored locally at the Hermes token path after authorization; do not commit tokens or `config/*.env` files.
+1. Review privacy/terms with a qualified professional before public launch.
+2. Configure real form endpoint or CRM/Google Sheets capture; the current form uses `mailto:condru01@gmail.com`.
+3. Approve exact outreach list and email templates before sending any external outreach campaign.
+4. Add real testimonials only after real customers approve them; do not fabricate social proof.
+5. Start the Telegram bot at https://t.me/AI2004151BOT and send `/start`, then run `python scripts/nexo_telegram.py discover` to save the alert chat.
+6. Gmail OAuth is stored locally at the Hermes token path after authorization; do not commit tokens or `config/*.env` files.
 
 ## Automation
 
