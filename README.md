@@ -1,3 +1,13 @@
+# Current NEXOGREX website
+
+Live: https://jbpsuport.online/ — Romanian; https://jbpsuport.online/en.html — English.
+
+Edit `docs/`. GitHub Pages publishes `main:/docs`. See [DEPLOYMENT.md](DEPLOYMENT.md) for the current offer, form verification, preservation details and maintenance.
+
+The older root-level implementation and notes below are retained for history and are not deployed.
+
+---
+
 # NEXO Prospect Intelligence Website
 
 Production static website for **NEXO by NEXOGREX S.R.L.**

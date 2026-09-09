@@ -19,13 +19,13 @@
         body: JSON.stringify(data), signal: controller.signal
       });
       const result = await response.json();
-      if (!response.ok || ![true, 'true'].includes(result.success)) throw new Error('Submission not accepted');
+      if (!response.ok) throw new Error('Submission not accepted');
       if (/activat|confirm.*email/i.test(result.message || '')) {
         status.textContent = ro ? 'Formularul necesită activarea adresei destinatarului. Trimiteți solicitarea direct la condru01@gmail.com.' : 'This form needs recipient email activation. Please send your enquiry directly to condru01@gmail.com.';
-      } else {
+      } else if ([true, 'true'].includes(result.success)) {
         status.textContent = ro ? 'Serviciul de formulare a acceptat solicitarea pentru procesare. Aceasta nu reprezintă confirmarea unei comenzi sau plăți. Pentru confirmare directă, scrieți la condru01@gmail.com.' : 'The form service accepted your enquiry for processing. This is not an order or payment confirmation. For direct confirmation, email condru01@gmail.com.';
         form.reset();
-      }
+      } else throw new Error('Submission not accepted');
     } catch {
       status.textContent = ro ? 'Nu putem confirma transmiterea. Datele au rămas în formular. Încercați din nou sau scrieți la condru01@gmail.com.' : 'We could not confirm submission. Your details are still in the form. Please retry or email condru01@gmail.com.';
     } finally {
