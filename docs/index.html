@@ -54,17 +54,19 @@
     <form id="request-form" action="https://formsubmit.co/danscutari04@gmail.com" method="POST">
       <input type="hidden" name="_subject" value="QR Forever — cerere cod QR">
       <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://jbpsuport.online/multumim.html">
+      <input type="hidden" name="_next" value="https://jbpsuport.online/planuri.html">
+      <input type="hidden" name="Referinta cererii" id="request-id">
       <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="field"><label for="bride">Numele miresei</label><input id="bride" name="Numele miresei" maxlength="80" autocomplete="given-name"></div>
       <div class="field"><label for="groom">Numele mirelui</label><input id="groom" name="Numele mirelui" maxlength="80" autocomplete="off"></div>
       <div class="field"><label for="event-name">Denumirea evenimentului *</label><input id="event-name" name="Eveniment" required maxlength="120" placeholder="Nunta Ana & Mihai"></div>
       <div class="field"><label for="wdate">Data evenimentului *</label><input type="date" id="wdate" name="Data evenimentului" required></div>
+      <div class="field"><label for="location">Locația evenimentului *</label><input id="location" name="Locatia evenimentului" required maxlength="200" autocomplete="off" placeholder="Localitatea și numele sălii / restaurantului"></div>
       <div class="field"><label for="email">Adresa voastră de email *</label><input type="email" id="email" name="email" required maxlength="254" autocomplete="email"></div>
       <div class="field"><label for="phone">Telefon (opțional)</label><input type="tel" id="phone" name="Telefon" maxlength="30" autocomplete="tel"></div>
       <div class="field"><label for="message">Ce ați dori pentru eveniment? (opțional)</label><textarea id="message" name="Detalii" maxlength="2000" rows="3" placeholder="Numărul invitaților, spațiul dorit sau alte detalii"></textarea></div>
       <label class="consent"><input type="checkbox" required> Sunt de acord să fiu contactat(ă) pentru această cerere. Am citit <a href="/confidentialitate.html">informațiile despre datele personale</a>.</label>
-      <div class="form-footer"><button type="submit" class="btn full" id="submit-btn">Generează codul QR</button><p class="help">Butonul trimite cererea către echipa QR Forever. Albumul nu se activează automat.</p></div>
+      <div class="form-footer"><button type="submit" class="btn full" id="submit-btn">Generează codul QR</button><p class="help">Trimiteți detaliile, apoi alegeți planul dorit. Albumul se activează după confirmarea administratorului.</p></div>
     </form>
   </div>
 </section>
@@ -73,5 +75,6 @@
 
 
 
+<script src="/js/request.js"></script>
 </body>
 </html>
