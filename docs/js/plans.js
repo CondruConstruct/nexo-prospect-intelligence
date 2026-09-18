@@ -1,5 +1,24 @@
 'use strict';
 (() => {
+  const buttons = [...document.querySelectorAll('.choose-plan')];
+  function selectPlan(button, scroll) {
+    document.getElementById('plan-' + button.dataset.plan).checked = true;
+    for (const other of buttons) {
+      const selected = other === button;
+      other.setAttribute('aria-pressed', String(selected));
+      other.textContent = selected ? 'Ales ✓' : 'Alege';
+    }
+    document.getElementById('selected-plan').textContent = 'Plan ales: ' + button.dataset.name + '. Apăsați „Trimite” pentru a confirma alegerea.';
+    if (scroll) {
+      const send = document.getElementById('send-plan');
+      send.focus({ preventScroll: true });
+      send.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
+    }
+  }
+  for (const button of buttons) {
+    button.addEventListener('click', () => selectPlan(button, true));
+    document.getElementById('plan-' + button.dataset.plan).addEventListener('change', () => selectPlan(button, false));
+  }
   const request = new URLSearchParams(location.search).get('request');
   const validId = request && /^[a-f0-9-]{36}$/i.test(request) ? request : '';
   document.getElementById('plan-request-id').value = validId || crypto.randomUUID();
