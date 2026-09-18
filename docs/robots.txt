@@ -1,4 +1,5 @@
 User-agent: *
-Allow: /
+Disallow: /admin.html
+Disallow: /album.html
+Disallow: /multumim.html
 Sitemap: https://jbpsuport.online/sitemap.xml
-
