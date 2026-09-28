@@ -312,7 +312,7 @@
         "Spațiu maxim (GB)",
         "quotaGB",
         "number",
-        event.quotaGB ?? event.quotaBytes / 1024 ** 3,
+        Number((event.quotaGB ?? event.quotaBytes / 1024 ** 3).toFixed(3)),
         { required: true, min: "0.001", max: "10000", step: "0.001" },
       ),
       field(
