@@ -64,3 +64,20 @@ npm test
 The test suite uses synthetic images and in-memory storage injection; it does not contact B2. It covers authentication, CSRF, session/link persistence, link rotation, event isolation, valid/invalid upload, original and thumbnail download, forbidden guest deletion, count/byte quota, concurrent reservation, disabled-event upload cancellation, expiry cleanup, failed deletion retries and restart reconciliation. Storage contract tests check private ACL, exact-version deletion and checksum validation.
 
 Before live launch: securely configure the standard B2 key, verify `/api/health`, log in, create a disposable event, upload a synthetic image, compare the downloaded bytes, check another event cannot see it, delete through admin, and verify expiry and QR navigation from a phone. Never call the service live until those checks pass.
+
+
+## Small VPS resource profile
+
+For a single-instance Linux VPS with 1 GB RAM, use these settings:
+
+```dotenv
+MAX_IMAGE_PIXELS=24000000
+MAX_UPLOAD_CONCURRENCY=1
+MAX_THUMBNAIL_CONCURRENCY=1
+IMAGE_PROCESS_CONCURRENCY=1
+NODE_OPTIONS=--max-old-space-size=192
+```
+
+The default pixel ceiling is 80 MP; this low-memory profile accepts at most 24 MP per image. Guest album metadata advertises `maxImagePixels` and `maxFileBytes`. The 200 MiB file ceiling is unchanged: originals stream through temporary disk and B2 rather than being buffered in V8. Provision disk space and swap, and monitor RSS under representative images before increasing these limits. A 192 MB V8 heap cap does not cap native libvips allocations.
+
+Configuration accepts integer pixel ceilings from 1 to 80 million, upload concurrency 1-4 (default 4), thumbnail concurrency 1-2 (default 2), and shared image-processing concurrency 1-2 (default 2). A shared gate prevents uploads and thumbnails from decoding simultaneously above this cap and rejects excess decode work with HTTP 503 for retry. It releases immediately after decoding so a slow B2 upload does not reserve image-processing capacity. libvips uses one worker thread and a 16 MB operation cache; all error paths release their slot.

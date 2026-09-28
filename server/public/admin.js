@@ -392,7 +392,7 @@
     b.disabled = true;
     notice();
     try {
-      await api("/login", "POST", { password: $("password").value });
+      await api("/login", "POST", { username: $("username").value.trim(), password: $("password").value });
       $("password").value = "";
       auth(true);
       storageState((await api("/session")).storageConfigured);

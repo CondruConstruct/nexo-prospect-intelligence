@@ -5,10 +5,10 @@ import os from "node:os";
 import path from "node:path";
 import { Readable } from "node:stream";
 import sharp from "sharp";
-import { createApp } from "../app.mjs";
+import { createApp, createImageGate } from "../app.mjs";
 import { passwordHash } from "../security.mjs";
 
-async function fixture(t) {
+async function fixture(t, overrides = {}) {
   const dir = await mkdtemp(path.join(os.tmpdir(), "qr-test-")),
     objects = new Map();
   let timestamp = Date.parse("2026-09-28T12:00:00Z");
@@ -17,6 +17,7 @@ async function fixture(t) {
     PUBLIC_URL: "http://127.0.0.1",
     APP_SECRET: "a".repeat(48),
     ADMIN_PASSWORD_HASH: passwordHash("correct password123!"),
+    ...overrides,
   };
   const storage = {
     check: async () => {},
@@ -442,4 +443,47 @@ test("retention extension during cleanup protects remaining photos", async (t) =
     1,
   );
   assert.equal((await f.request("/api/album", { token: a.token })).status, 200);
+});
+
+
+test("shared image gate rejects excess work and recovers idempotently", () => {
+  const acquire = createImageGate(1);
+  const release = acquire();
+  assert.throws(() => acquire(), { status: 503 });
+  release(); release();
+  const releaseNext = acquire();
+  assert.throws(() => acquire(), { status: 503 });
+  releaseNext();
+});
+
+test("configured pixel limit is advertised and oversized images leave no objects", async (t) => {
+  const f = await fixture(t, { MAX_IMAGE_PIXELS: "1000000", MAX_UPLOAD_CONCURRENCY: "1", MAX_THUMBNAIL_CONCURRENCY: "1", IMAGE_PROCESS_CONCURRENCY: "1" });
+  await f.login();
+  const e = await f.event();
+  const info = await (await f.request("/api/album", { token: e.token })).json();
+  assert.equal(info.event.maxImagePixels, 1000000);
+  assert.equal(info.event.maxFileBytes, 200 * 1024 * 1024);
+  const oversized = await sharp({ create: { width: 1001, height: 1000, channels: 3, background: "red" } }).png().toBuffer();
+  assert.equal((await f.upload(e.token, oversized)).status, 400);
+  assert.equal(f.objects.size, 0);
+  assert.equal((await f.upload(e.token)).status, 201);
+  assert.deepEqual(await f.tempFiles(), []);
+});
+
+
+test("single upload profile rejects concurrency while B2 is pending and recovers", async (t) => {
+  const f = await fixture(t, { MAX_UPLOAD_CONCURRENCY: "1", IMAGE_PROCESS_CONCURRENCY: "1" });
+  await f.login();
+  const e = await f.event();
+  let enter, release;
+  const started = new Promise(r => { enter = r; });
+  const held = new Promise(r => { release = r; });
+  const originalPut = f.storage.put;
+  f.storage.put = async (...args) => { enter(); await held; return originalPut(...args); };
+  const first = f.upload(e.token);
+  await started;
+  try { assert.equal((await f.upload(e.token)).status, 503); }
+  finally { release(); }
+  assert.equal((await first).status, 201);
+  assert.equal((await f.upload(e.token)).status, 201);
 });

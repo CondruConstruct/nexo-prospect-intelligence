@@ -14,6 +14,17 @@ import { hash, passwordMatches, seal, unseal } from "./security.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fail = (status, message) => Object.assign(new Error(message), { status });
 const MB = 1024 * 1024;
+sharp.cache({ memory: 16, files: 0, items: 50 });
+sharp.concurrency(1);
+export function createImageGate(capacity) {
+  let active = 0;
+  return () => {
+    if (active >= capacity) throw fail(503, "Server ocupat. Reîncercați în câteva secunde.");
+    active++;
+    let released = false;
+    return () => { if (!released) { released = true; active--; } };
+  };
+}
 export async function createApp({
   env = process.env,
   storage,
@@ -26,6 +37,17 @@ export async function createApp({
     !/^[a-f0-9]{32}:[a-f0-9]{128}$/i.test(env.ADMIN_PASSWORD_HASH)
   )
     throw new Error("ADMIN_PASSWORD_HASH is required.");
+  function resourceLimit(name, fallback, min, max) {
+    const value = env[name] === undefined ? fallback : Number(env[name]);
+    if (!Number.isInteger(value) || value < min || value > max)
+      throw new Error(`${name} must be an integer between ${min} and ${max}.`);
+    return value;
+  }
+  const maxImagePixels = resourceLimit("MAX_IMAGE_PIXELS", 80000000, 1000000, 80000000);
+  const maxUploadConcurrency = resourceLimit("MAX_UPLOAD_CONCURRENCY", 4, 1, 4);
+  const maxThumbnailConcurrency = resourceLimit("MAX_THUMBNAIL_CONCURRENCY", 2, 1, 2);
+  const acquireImage = createImageGate(resourceLimit("IMAGE_PROCESS_CONCURRENCY", 2, 1, 2));
+  const maxFileBytes = 200 * MB;
   const origin = new URL(env.PUBLIC_URL).origin,
     production = env.NODE_ENV === "production";
   if (production && !origin.startsWith("https://"))
@@ -117,6 +139,8 @@ export async function createApp({
         .get(e.id).n,
       createdAt: e.created,
       storageConfigured: storageReady,
+      maxImagePixels,
+      maxFileBytes,
     };
   }
   const find = (id) => {
@@ -208,6 +232,7 @@ export async function createApp({
     try {
       rate(req, "login", 8, 15 * 60 * 1000);
       if (
+        (req.body.username !== undefined && req.body.username !== "admin") ||
         typeof req.body.password !== "string" ||
         req.body.password.length > 1024 ||
         !passwordMatches(req.body.password, env.ADMIN_PASSWORD_HASH)
@@ -425,12 +450,12 @@ export async function createApp({
   });
   const upload = multer({
     dest: tmp,
-    limits: { fileSize: 200 * MB, files: 1, fields: 0, parts: 1 },
+    limits: { fileSize: maxFileBytes, files: 1, fields: 0, parts: 1 },
   }).single("photo");
   const activeUploads = new Set();
   let uploadSlots = 0;
   function uploadCapacity(req, res, next) {
-    if (uploadSlots >= 4)
+    if (uploadSlots >= maxUploadConcurrency)
       return next(
         fail(
           503,
@@ -475,12 +500,13 @@ export async function createApp({
       });
     },
     async (req, res, next) => {
-      let p,
+      let p, releaseImage,
         stored = false;
       try {
         if (!req.file) throw fail(400, "Selectați o fotografie.");
+        releaseImage = acquireImage();
         const metadata = await sharp(req.file.path, {
-          limitInputPixels: 80000000,
+          limitInputPixels: maxImagePixels,
           failOn: "warning",
         }).metadata();
         if (
@@ -492,12 +518,14 @@ export async function createApp({
             "Folosiți fotografii JPEG, PNG sau WebP fără animație.",
           );
         await sharp(req.file.path, {
-          limitInputPixels: 80000000,
+          limitInputPixels: maxImagePixels,
           failOn: "warning",
         })
           .resize(1, 1)
           .raw()
           .toBuffer();
+        releaseImage();
+        releaseImage = null;
         const id = randomUUID(),
           bytes = (await stat(req.file.path)).size,
           ext = { jpeg: "jpg", png: "png", webp: "webp" }[metadata.format];
@@ -586,6 +614,7 @@ export async function createApp({
               ),
         );
       } finally {
+        releaseImage?.();
         req.releaseUpload?.();
         if (p) activeUploads.delete(p.id);
         if (req.file) await unlink(req.file.path).catch(() => {});
@@ -623,10 +652,10 @@ export async function createApp({
   );
   let thumbnailSlots = 0;
   async function thumbnail(req, res, next, eventId) {
-    let file;
+    let file, releaseImage;
     try {
       rate(req, "thumbnail", 10000, 3600000);
-      if (thumbnailSlots >= 2)
+      if (thumbnailSlots >= maxThumbnailConcurrency)
         throw fail(429, "Prea multe previzualizări simultane. Reîncercați.");
       const p = db
         .prepare(
@@ -641,7 +670,7 @@ export async function createApp({
       const limit = new Transform({
         transform(chunk, encoding, done) {
           bytes += chunk.length;
-          done(bytes > 200 * MB ? new Error("Object too large") : null, chunk);
+          done(bytes > maxFileBytes ? new Error("Object too large") : null, chunk);
         },
       });
       await pipeline(
@@ -649,8 +678,9 @@ export async function createApp({
         limit,
         createWriteStream(file, { flags: "wx", mode: 0o600 }),
       );
+      releaseImage = acquireImage();
       const small = await sharp(file, {
-        limitInputPixels: 80000000,
+        limitInputPixels: maxImagePixels,
         failOn: "warning",
       })
         .rotate()
@@ -662,6 +692,8 @@ export async function createApp({
         })
         .jpeg({ quality: 75 })
         .toBuffer();
+      releaseImage();
+      releaseImage = null;
       res
         .set({
           "Content-Type": "image/jpeg",
@@ -671,6 +703,7 @@ export async function createApp({
     } catch (e) {
       next(e);
     } finally {
+      releaseImage?.();
       if (file) {
         thumbnailSlots--;
         await unlink(file).catch(() => {});

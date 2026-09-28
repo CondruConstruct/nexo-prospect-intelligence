@@ -70,6 +70,8 @@
   async function metadata() {
     const data = await (await request("")).json();
     const event = data.event || data;
+    $("pixel-limit").textContent = String((event.maxImagePixels || 80000000) / 1000000);
+    $("file-limit").textContent = bytes(event.maxFileBytes || 200 * 1024 * 1024);
     $("title").textContent = event.name;
     $("details").textContent = [
       event.location,
