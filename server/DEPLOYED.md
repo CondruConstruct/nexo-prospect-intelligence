@@ -1,8 +1,8 @@
 # VPS deployment — 28 September 2026
 
-Live application: https://qr-forever.162-254-38-74.sslip.io/
+Live application: https://qrforever.md/
 
-Administrator: append `/admin.html`, username `admin`. The generated password is delivered privately and is not present in this repository. Temporary hostname uses sslip.io DNS; it should be replaced by the owner's domain for ongoing use.
+Administrator: append `/admin.html`, username `admin`. The generated password is delivered privately and is not present in this repository. The old temporary sslip.io hostname redirects to the canonical domain, preserving existing album links.
 
 - Host: 162.254.38.74, AlmaLinux 9.7, approximately 1 GB RAM and 20 GB disk.
 - Node 24.21.0 and Caddy 2.11.4 downloaded from their official releases, verified against published checksums.
@@ -31,3 +31,7 @@ Follow-up `835ffcf` fixes fractional quota rounding in the admin edit form. The 
 Check `systemctl status qr-forever caddy`, HTTPS `/api/health`, disk usage and cleanup failures. Keep code and protected configuration separate from database backups. Use SQLite's backup API or stop the app before copying a database. Do not copy a live database without its WAL. Do not delete the data directory or rotate `APP_SECRET` during normal upgrades.
 
 Root SSH initially succeeded, subsequent connections briefly closed before authentication, then access recovered. No SSH policy or root password was changed. The hosting-panel login was not established. Rotate shared infrastructure credentials through the owner's normal recovery workflow after preserving working access.
+
+## Canonical activation confirmed
+
+At19:05UTC on28September2026, the installed timer activated https://qrforever.md/. Both alfa.dns.md and beta.dns.md return162.254.38.74; publicCloudflare/GoogleDNS agree. ApexHTTPS200 and health(storageConfiguredtrue), www/temporary redirects confirmed fromVPS. Canonicalbrowser adminlogin, newQRdomain, oldQRfragmentredirect, albumthumbnail and selectedZIP allpassed. BrowserQA used isolatedhostresolution because the workstation network resolver still cachedNXDOMAIN; HTTPSverification was not bypassed. LocalDNSflush didnot clear upstreamnegativecache. No DNSaccount or globalnetworksetting changes were made.
