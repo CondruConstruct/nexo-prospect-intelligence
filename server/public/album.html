@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Albumul evenimentului — QR Forever</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <nav class="app-nav">
+      <div class="wrap">
+        <a class="brand" href="/">QR Forever</a
+        ><span class="muted">Amintirile voastre, împreună</span>
+      </div>
+    </nav>
+    <main class="wrap">
+      <header class="page-head">
+        <p class="eyebrow">Albumul evenimentului</p>
+        <h1 id="title">Bine ai venit</h1>
+        <p id="details" class="lead"></p>
+      </header>
+      <p id="status" class="notice" role="status">Se deschide albumul…</p>
+      <div id="content" hidden>
+        <section class="card">
+          <div class="row">
+            <div>
+              <h2>Adaugă o amintire</h2>
+              <p>
+                Toți invitații cu acest link pot vedea și descărca fotografiile.
+                Numai administratorul le poate șterge.
+              </p>
+            </div>
+          </div>
+          <form id="upload-form" class="stack">
+            <label class="field" for="photos"
+              >Alege fotografii<input
+                id="photos"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                required
+            /></label>
+            <p class="muted">
+              JPEG, PNG sau WebP · maximum 200 MB și 80 megapixeli/fotografie.
+              Originalele pot conține informații despre locație; elimină-le
+              înainte de încărcare dacă nu dorești să le distribui.
+            </p>
+            <div class="row">
+              <button class="btn" id="upload-button">
+                Încarcă fotografiile</button
+              ><span id="capacity" class="muted"></span>
+            </div>
+          </form>
+          <div id="upload-progress" class="notice" role="status" hidden></div>
+          <ul id="upload-results" aria-live="polite"></ul>
+        </section>
+        <section aria-labelledby="gallery-heading">
+          <div class="page-head row">
+            <h2 id="gallery-heading">Fotografiile voastre</h2>
+            <button class="btn secondary" id="refresh">Actualizează</button>
+          </div>
+          <div id="gallery" class="photo-grid"></div>
+          <p id="empty" class="empty" hidden>
+            Albumul așteaptă prima fotografie. Încarcă o amintire de la
+            eveniment!
+          </p>
+          <button id="more" class="btn secondary" hidden>
+            Mai multe fotografii
+          </button>
+        </section>
+      </div>
+      <noscript
+        ><p class="notice">
+          Activează JavaScript pentru a deschide albumul.
+        </p></noscript
+      >
+    </main>
+    <dialog id="preview">
+      <button id="close-preview" class="btn secondary" autofocus>
+        Închide
+      </button>
+      <p id="preview-name"></p>
+      <img
+        id="preview-image"
+        alt="Fotografia selectată"
+        style="max-width: 100%; max-height: 75vh; object-fit: contain"
+      />
+    </dialog>
+    <footer class="wrap muted">
+      <p>
+        QR Forever ·
+        <a href="mailto:danscutari04@gmail.com">Contact administrator</a>
+      </p>
+    </footer>
+    <script src="/album.js" defer></script>
+  </body>
+</html>

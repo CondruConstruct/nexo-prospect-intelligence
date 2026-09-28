@@ -1,3 +1,7 @@
+## September 28: real backend prepared and Backblaze verified
+
+The `server/` directory now contains the Linux Node 24 / Docker application, authenticated admin panel, private guest albums and Backblaze adapter. See [server/README.md](server/README.md) for deployment and [server/VERIFICATION.md](server/VERIFICATION.md) for evidence. This package is not deployed yet; the existing GitHub Pages `/docs` site continues serving the request flow and demonstrative admin/album pages until the Linux host is supplied.
+
 # QR Forever
 
 ## September 28 replacement — current public flow

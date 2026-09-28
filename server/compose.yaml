@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      DATA_DIR: /data
+      TRUST_PROXY: '1'
+    volumes:
+      - qr_data:/data
+    ports:
+      - 127.0.0.1:3000:3000
+volumes:
+  qr_data:

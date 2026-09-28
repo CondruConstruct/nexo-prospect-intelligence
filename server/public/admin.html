@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="same-origin" />
+    <title>Administrare — QR Forever</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
+    <header class="app-nav">
+      <div class="wrap">
+        <a class="brand" href="/">QR <span>Forever</span></a>
+        <div class="row">
+          <span class="muted">Administrare</span
+          ><button id="logout" class="btn secondary" hidden>Deconectare</button>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <div class="page-head">
+        <span class="eyebrow">Albumele evenimentelor</span>
+        <h1>Amintiri, bine organizate.</h1>
+        <p class="lead">
+          Creați albumul, alegeți limitele și distribuiți codul QR invitaților.
+        </p>
+      </div>
+      <p id="status" class="notice" role="status" aria-live="polite"></p>
+      <section id="login" class="card login-card" hidden>
+        <h2>Conectare administrator</h2>
+        <form id="login-form" class="stack">
+          <label class="field"
+            >Parola administratorului<input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              maxlength="256" /></label
+          ><button class="btn" type="submit">Conectează-te</button>
+        </form>
+      </section>
+      <noscript
+        ><p class="notice error">
+          Activați JavaScript pentru administrare.
+        </p></noscript
+      >
+      <div id="workspace" class="stack" hidden>
+        <p id="storage-notice" class="notice error" hidden>
+          Stocarea fotografiilor nu este conectată. Puteți configura evenimente,
+          dar verificați încărcarea fotografiilor înainte de a distribui
+          codurile QR.
+        </p>
+        <section class="card">
+          <h2>Creează un eveniment</h2>
+          <form id="create-form" class="stack">
+            <div class="grid two">
+              <label class="field"
+                >Denumire eveniment<input
+                  name="name"
+                  required
+                  maxlength="120"
+                  placeholder="Nunta Ana și Mihai" /></label
+              ><label class="field"
+                >Locație<input
+                  name="location"
+                  required
+                  maxlength="200"
+                  placeholder="Localitatea și sala" /></label
+              ><label class="field"
+                >Data evenimentului<input
+                  name="eventDate"
+                  type="date"
+                  required /></label
+              ><label class="field"
+                >Spațiu maxim (GB)<input
+                  name="quotaGB"
+                  type="number"
+                  required
+                  min="0.001"
+                  max="10000"
+                  step="0.001"
+                  value="5" /></label
+              ><label class="field"
+                >Număr maxim de fotografii<input
+                  name="maxPhotos"
+                  type="number"
+                  min="1"
+                  max="1000000"
+                  step="1"
+                  placeholder="Fără limită de număr"
+                /><small
+                  >Lăsați gol pentru număr nelimitat. Limita de spațiu rămâne
+                  valabilă.</small
+                ></label
+              ><label class="field"
+                >Păstrare după eveniment (zile)<input
+                  name="retentionDays"
+                  type="number"
+                  required
+                  min="1"
+                  max="3650"
+                  step="1"
+                  value="30"
+              /></label>
+            </div>
+            <div>
+              <button type="submit" class="btn">
+                Creează evenimentul și codul QR
+              </button>
+            </div>
+          </form>
+        </section>
+        <section id="qr-panel" class="card qr-panel" hidden>
+          <div class="row between">
+            <h2 id="qr-title"></h2>
+            <button id="close-qr" class="btn secondary no-print" type="button">
+              Închide
+            </button>
+          </div>
+          <p>Scanează și adaugă fotografiile tale.</p>
+          <div id="qr"></div>
+          <a id="guest-link" target="_blank" rel="noopener noreferrer"></a>
+          <p class="muted no-print">
+            Oricine are acest link poate vedea, încărca și descărca fotografii.
+            Distribuiți-l numai participanților.
+          </p>
+          <div class="row no-print">
+            <button id="copy-link" class="btn" type="button">
+              Copiază linkul</button
+            ><a
+              id="download-qr"
+              class="btn secondary"
+              download="qr-eveniment.svg"
+              >Descarcă QR (SVG)</a
+            ><button id="print-qr" class="btn secondary" type="button">
+              Tipărește
+            </button>
+          </div>
+        </section>
+        <section>
+          <div class="row between toolbar">
+            <h2>Evenimentele voastre</h2>
+            <button id="reload" class="btn secondary" type="button">
+              Actualizează
+            </button>
+          </div>
+          <div id="events" class="stack"></div>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="wrap">QR Forever · Administrare privată</div>
+    </footer>
+    <script src="/vendor/qrcode.js"></script>
+    <script src="/admin.js"></script>
+  </body>
+</html>
