@@ -1,0 +1,25 @@
+[Unit]
+Description=QR Forever private event albums
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=qrforever
+Group=qrforever
+WorkingDirectory=/opt/qr-forever/current/server
+EnvironmentFile=/etc/qr-forever/app.env
+ExecStart=/usr/local/bin/node index.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=40
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/qr-forever
+UMask=0077
+MemoryHigh=450M
+MemoryMax=650M
+TasksMax=128
+[Install]
+WantedBy=multi-user.target

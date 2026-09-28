@@ -1,0 +1,7 @@
+qr-forever.162-254-38-74.sslip.io {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:3000
+}
+http://162.254.38.74 {
+    redir https://qr-forever.162-254-38-74.sslip.io{uri} 302
+}

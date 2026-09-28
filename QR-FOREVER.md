@@ -1,3 +1,7 @@
+## September 28: VPS deployment online
+
+The full application is live at https://qr-forever.162-254-38-74.sslip.io with real admin, guest albums, HTTPS and private Backblaze storage. `jbpsuport.online` still serves GitHub Pages until its DNS is changed and the canonical domain is switched. See [server/DEPLOYED.md](server/DEPLOYED.md). Earlier preparation-only status below is historical.
+
 ## September 28: real backend prepared and Backblaze verified
 
 The `server/` directory now contains the Linux Node 24 / Docker application, authenticated admin panel, private guest albums and Backblaze adapter. See [server/README.md](server/README.md) for deployment and [server/VERIFICATION.md](server/VERIFICATION.md) for evidence. This package is not deployed yet; the existing GitHub Pages `/docs` site continues serving the request flow and demonstrative admin/album pages until the Linux host is supplied.
