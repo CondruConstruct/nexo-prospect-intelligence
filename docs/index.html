@@ -1,80 +1,356 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QR Forever — pozele nunții voastre, adunate de la toți invitații</title>
-<meta name="description" content="Un cod QR pentru nunta voastră. Invitații scanează și încarcă pozele lor, voi le păstrați pe toate, într-un singur loc.">
-<link rel="stylesheet" href="css/style.css">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="referrer" content="strict-origin-when-cross-origin"></head>
+<meta name="description" content="Un cod QR pentru nunta voastră. Invitații scanează și încarcă pozele lor, voi le păstrați pe toate într-un singur loc. Puteți primi și stickere și suporturi de masă cu codul QR.">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/redesign.css?v=20260928">
+<link rel="icon" href="/favicon.svg">
+<meta name="theme-color" content="#5A3CF0"></head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h.01M17.5 21H21v-3"/></symbol>
+    <symbol id="i-sticker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-8-8h3l5 5z"/><path d="M15 4v3a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-stand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20L8 5h8l2 15z"/><path d="M4 20h16"/><path d="M10 10h4v4h-4z"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18.5h2"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="QR Forever, început pagină"><i><svg><use href="#i-qr"/></svg></i>QR Forever</a>
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#cum-functioneaza">Cum funcționează</a></li>
+        <li><a href="#kit">Stickere și suporturi</a></li>
+        <li><a href="#preturi">Prețuri</a></li>
+        <li><a href="#intrebari">Întrebări</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-primary" href="#creeaza">Cere codul QR</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
 <section class="hero">
-  <svg class="hero-motif" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <circle cx="160" cy="100" r="70" stroke="#8A9A82" stroke-width="1"/>
-    <circle cx="230" cy="100" r="70" stroke="#B4838F" stroke-width="1"/>
-  </svg>
-  <div class="hero-content wrap">
-    <h1>Pozele nunții voastre, adunate de la toți cei care au fost acolo</h1>
-    <p class="lede">Un cod QR, afișat în sala de nuntă. Invitații scanează și încarcă direct pozele lor — voi le găsiți pe toate, într-un singur loc, gata oricând să retrăiți seara aceea.</p>
-    <a href="#creeaza" class="btn">Creați codul QR pentru nunta voastră</a>
+  <div class="wrap">
+    <div>
+      <h1>Toate pozele de la nuntă, într-un singur album.</h1>
+      <p class="lead">Afișați un cod QR în sală. Invitații îl scanează și încarcă pozele lor direct de pe telefon. Voi primiți totul într-un singur loc, fără să vă rugați de nimeni să vi le trimită.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#creeaza">Cere codul QR pentru nunta ta</a>
+        <a class="btn btn-ghost" href="#preturi">Vezi prețurile</a>
+      </div>
+      <ul class="facts">
+        <li><svg><use href="#i-check"/></svg>Invitații nu instalează nicio aplicație</li>
+        <li><svg><use href="#i-check"/></svg>Invitați nelimitați</li>
+        <li><svg><use href="#i-check"/></svg>Stickere cadou la fiecare plan</li>
+      </ul>
+    </div>
+
+    <div class="stage" role="img" aria-label="Suport de masă cu cod QR și stickere cu același cod">
+      <div class="sticker sq"><svg class="qr-js" data-seed="7" aria-hidden="true"></svg></div>
+      <div class="tent" aria-hidden="true">
+        <b>Scanează și trimite pozele tale</b>
+        <div class="qr-box"><svg class="qr-js" data-seed="21"></svg><div class="beam"></div></div>
+        <small>Fără aplicație. Durează 10 secunde.</small>
+      </div>
+      <div class="sticker round" aria-hidden="true">
+        <div><svg class="qr-js" data-seed="21" style="margin-inline:auto"></svg><span>Pozele tale,<br>aici</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="steps wrap">
-  <ol>
-    <li>
-      <span class="step-num">01</span>
-      <div class="step-body">
-        <h3>Generați codul</h3>
-        <p>Completați numele voastre și data nunții — trimiteți cererea, iar noi vă contactăm pentru configurarea albumului și a codului QR.</p>
+<!-- CUM FUNCTIONEAZA -->
+<section id="cum-functioneaza">
+  <div class="wrap">
+    <div class="head">
+      <h2>Cum funcționează, pas cu pas</h2>
+      <p>Voi vă ocupați de nuntă. Noi ne ocupăm ca pozele să ajungă la voi.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">Pasul 1</div>
+        <h3>Alegeți planul</h3>
+        <p>Alegeți pachetul potrivit și completați datele evenimentului.</p>
+        <span class="who">Voi</span>
       </div>
-    </li>
-    <li>
-      <span class="step-num">02</span>
-      <div class="step-body">
-        <h3>Îl așezați în sală</h3>
-        <p>Pe mese, la intrare, lângă cadouri — oriunde invitații îl pot observa și scana ușor, fără nicio aplicație.</p>
+      <div class="step">
+        <div class="n">Pasul 2</div>
+        <h3>Primiți codul și materialele</h3>
+        <p>Administratorul confirmă cererea, plata și activarea codului QR. Stabiliți împreună livrarea stickerelor și suporturilor.</p>
+        <span class="who">Voi și invitații</span>
       </div>
-    </li>
-    <li>
-      <span class="step-num">03</span>
-      <div class="step-body">
-        <h3>Păstrați totul</h3>
-        <p>Fiecare poză încărcată de un invitat ajunge direct la voi. Fără să căutați prin telefoanele tuturor, fără poze pierdute.</p>
+      <div class="step">
+        <div class="n">Pasul 3</div>
+        <h3>Invitații trimit pozele</h3>
+        <p>Scanează codul cu telefonul, aleg pozele și le încarcă direct în album. Fără aplicație.</p>
+        <span class="who">Invitații</span>
       </div>
-    </li>
-  </ol>
+    </div>
+  </div>
 </section>
 
-<section class="wrap" id="creeaza" style="padding-bottom: 96px;">
-  <div class="card">
-    <h2>Codul QR al evenimentului vostru</h2>
-    <p class="notice">Momentan preluăm cereri. Încărcarea și păstrarea fotografiilor vor fi disponibile după activarea albumului.</p>
-    <form id="request-form" action="https://formsubmit.co/danscutari04@gmail.com" method="POST">
-      <input type="hidden" name="_subject" value="QR Forever — cerere cod QR">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://jbpsuport.online/planuri.html">
-      <input type="hidden" name="Referinta cererii" id="request-id">
-      <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <div class="field"><label for="bride">Numele miresei</label><input id="bride" name="Numele miresei" maxlength="80" autocomplete="given-name"></div>
-      <div class="field"><label for="groom">Numele mirelui</label><input id="groom" name="Numele mirelui" maxlength="80" autocomplete="off"></div>
-      <div class="field"><label for="event-name">Denumirea evenimentului *</label><input id="event-name" name="Eveniment" required maxlength="120" placeholder="Nunta Ana & Mihai"></div>
-      <div class="field"><label for="wdate">Data evenimentului *</label><input type="date" id="wdate" name="Data evenimentului" required></div>
-      <div class="field"><label for="location">Locația evenimentului *</label><input id="location" name="Locatia evenimentului" required maxlength="200" autocomplete="off" placeholder="Localitatea și numele sălii / restaurantului"></div>
-      <div class="field"><label for="email">Adresa voastră de email *</label><input type="email" id="email" name="email" required maxlength="254" autocomplete="email"></div>
-      <div class="field"><label for="phone">Telefon (opțional)</label><input type="tel" id="phone" name="Telefon" maxlength="30" autocomplete="tel"></div>
-      <div class="field"><label for="message">Ce ați dori pentru eveniment? (opțional)</label><textarea id="message" name="Detalii" maxlength="2000" rows="3" placeholder="Numărul invitaților, spațiul dorit sau alte detalii"></textarea></div>
-      <label class="consent"><input type="checkbox" required> Sunt de acord să fiu contactat(ă) pentru această cerere. Am citit <a href="/confidentialitate.html">informațiile despre datele personale</a>.</label>
-      <div class="form-footer"><button type="submit" class="btn full" id="submit-btn">Generează codul QR</button><p class="help">Trimiteți detaliile, apoi alegeți planul dorit. Albumul se activează după confirmarea administratorului.</p></div>
+<!-- KIT FIZIC -->
+<section class="kit" id="kit">
+  <div class="wrap">
+    <div>
+      <div class="head">
+        <h2>Codul, chiar în sala voastră</h2>
+        <p>Un cod QR pe telefon nu ajunge la nimeni. Stickerele sunt cadou la orice plan, iar suporturile de masă le alegeți după câte mese aveți.</p>
+      </div>
+      <ul class="list">
+        <li>
+          <div class="ic"><svg><use href="#i-sticker"/></svg></div>
+          <div>
+            <h3>Stickere cadou: 10, 20 sau 40</h3>
+            <p>Le lipiți unde vreți: la intrare, la bar, la photo corner, în zonele cu lume. Numărul depinde de planul ales, iar fiecare are codul QR al evenimentului vostru.</p>
+          </div>
+        </li>
+        <li>
+          <div class="ic"><svg><use href="#i-stand"/></svg></div>
+          <div>
+            <h3>Suporturi de masă, la alegere</h3>
+            <p>Câte unul pentru fiecare masă, ca invitații să scaneze fără să se ridice și fără să întrebe pe nimeni. Alegeți câte vă trebuie.</p>
+          </div>
+        </li>
+        <li>
+          <div class="ic"><svg><use href="#i-truck"/></svg></div>
+          <div>
+            <h3>Le primiți înainte de eveniment</h3>
+            <p>Le realizăm noi și vi le trimitem înainte de data nunții. Voi doar le așezați în sală.</p>
+          </div>
+        </li>
+      </ul>
+      <a class="btn btn-primary" href="#suporturi">Alege câte suporturi vrei</a>
+    </div>
+
+    <div class="kit-visual" role="img" aria-label="Stickere rotunde și pătrate și un suport de masă, toate cu cod QR">
+      <span class="tag">Se trimit înainte de nuntă</span>
+      <div class="wall">
+        <div class="s1"><svg class="qr qr-js" data-seed="21"></svg></div>
+        <div class="s2"><svg class="qr qr-js" data-seed="21"></svg></div>
+        <div class="s3"><svg class="qr qr-js" data-seed="21"></svg></div>
+      </div>
+      <div class="tent" aria-hidden="true">
+        <b>Scanează și trimite pozele tale</b>
+        <div class="qr-box"><svg class="qr-js" data-seed="21"></svg></div>
+        <small>Masa 1</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRETURI -->
+<section id="preturi">
+  <div class="wrap">
+    <div class="head">
+      <h2>Alegeți planul potrivit nunții voastre</h2>
+      <p>Prețuri per eveniment, confirmate de administrator. Toate planurile includ codul QR și stickere cadou, dacă le doriți. Limita propusă este de 200 MB per fișier, după activarea serviciului.</p>
+    </div>
+
+    <div class="plans">
+      <article class="plan">
+        <h3>Esențial</h3>
+        <p class="for">Pentru zile de naștere, cumetrii sau nunți mici, cu până la 40–50 de invitați.</p>
+        <div class="price">29<span>€</span></div>
+        <div class="once">plată unică</div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Până la 100 de poze încărcate</li>
+          <li><svg><use href="#i-check"/></svg>Invitați nelimitați</li>
+          <li><svg><use href="#i-check"/></svg>Link activ 7 zile</li>
+          <li class="gift"><svg><use href="#i-sticker"/></svg>10 stickere cadou</li>
+        </ul>
+        <a class="btn btn-ghost" href="#suporturi" data-plan="esential">Alege Esențial</a>
+      </article>
+
+      <article class="plan best">
+        <span class="badge">Plan intermediar</span>
+        <h3>Amintiri</h3>
+        <p class="for">Pentru evenimente cu până la 100 de invitați.</p>
+        <div class="price">69<span>€</span></div>
+        <div class="once">plată unică</div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Până la 500 de poze încărcate</li>
+          <li><svg><use href="#i-check"/></svg>Invitați nelimitați</li>
+          <li><svg><use href="#i-check"/></svg>Link activ 15 zile</li>
+          <li class="gift"><svg><use href="#i-sticker"/></svg>20 de stickere cadou</li>
+        </ul>
+        <a class="btn" href="#suporturi" data-plan="amintiri">Alege Amintiri</a>
+      </article>
+
+      <article class="plan">
+        <h3>Poveste</h3>
+        <p class="for">Pentru nunți mari, cu aproximativ 150–300 de invitați.</p>
+        <div class="price">99<span>€</span></div>
+        <div class="once">plată unică</div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Poze încărcate nelimitat</li>
+          <li><svg><use href="#i-check"/></svg>Invitați nelimitați</li>
+          <li><svg><use href="#i-check"/></svg>Link activ 60 de zile</li>
+          <li class="gift"><svg><use href="#i-sticker"/></svg>40 de stickere cadou</li>
+        </ul>
+        <a class="btn btn-ghost" href="#suporturi" data-plan="poveste">Alege Poveste</a>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<!-- SUPORTURI -->
+<section id="suporturi" style="padding-top:0">
+  <div class="wrap">
+    <div class="stands">
+      <div>
+        <h2>Câte suporturi de masă aveți nevoie?</h2>
+        <p class="lead2">Recomandăm câte unul pe masă, ca invitații să scaneze fără să se ridice. Stickerele cadou merg la intrare, la bar și la photo corner, iar suporturile acoperă mesele.</p>
+        <p class="lead2"><b><span data-stand-price>8</span>€ pe suport</b>. Un detaliu simplu, dar foarte util: invitații au codul QR chiar pe masă, la îndemână, atunci când vor să-și trimită pozele.</p>
+      </div>
+      <div class="stands-pick">
+        <div class="legend" id="stands-label">Număr de suporturi</div>
+        <div class="stepper" role="group" aria-labelledby="stands-label">
+          <button type="button" id="st-minus" aria-label="Scade un suport">&minus;</button>
+          <output id="st-out" aria-live="polite">0</output>
+          <button type="button" id="st-plus" aria-label="Adaugă un suport">+</button>
+        </div>
+        <div class="chips" role="group" aria-label="Alegeri rapide">
+          <button type="button" data-n="5">5 bucăți</button>
+          <button type="button" data-n="10">10 bucăți</button>
+          <button type="button" data-n="15">15 bucăți</button>
+          <button type="button" data-n="20">20 bucăți</button>
+        </div>
+        <div class="st-total" id="st-line">Alegeți numărul de suporturi de care aveți nevoie. Le puteți adăuga sau modifica înainte de plată.</div>
+        <a class="btn btn-primary" href="#creeaza">Continuă</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="intrebari" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <h2>Întrebări frecvente</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Invitații trebuie să instaleze o aplicație?</summary>
+        <p>Nu. Deschid camera telefonului, scanează codul și aleg pozele. Merge pe orice telefon modern.</p>
+      </details>
+      <details>
+        <summary>Cum primesc albumul după eveniment?</summary>
+        <p>Toate pozele încărcate de invitați ajung în albumul vostru, într-un singur loc. Vă spunem exact cum le accesați când configurăm împreună evenimentul.</p>
+      </details>
+      <details>
+        <summary>Ce înseamnă „link activ 7, 15 sau 60 de zile”?</summary>
+        <p>Perioada aleasă începe de la data evenimentului, după activarea albumului. Alegeți planul după cât timp vreți ca invitații să poată trimite poze și voi să le vedeți.</p>
+      </details>
+      <details>
+        <summary>Cum funcționează stickerele și suporturile de masă?</summary>
+        <p>Sunt materiale tipărite cu codul QR al evenimentului vostru. Fiecare plan include stickere cadou: 10 la Esențial, 20 la Amintiri și 40 la Poveste. Le lipiți oriunde prin sală. Suporturile de masă se adaugă separat, la 8€ bucata. Calendarul și costul livrării se confirmă cu administratorul înainte de comandă.</p>
+      </details>
+      <details>
+        <summary>Când este bine să fac rezervarea?</summary>
+        <p>Vă recomandăm să faceți rezervarea din timp, mai ales pentru evenimentele din perioadele aglomerate. Astfel, aveți locul asigurat și timp suficient pentru pregătirea materialelor.</p>
+      </details>
+      <details>
+        <summary>Ce se întâmplă după trimitere?</summary>
+        <p>După trimiterea cererii, administratorul confirmă disponibilitatea, detaliile de plată și livrare. Codul QR și albumul se activează separat, după confirmare. Momentan nu se încasează plăți online.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="request" id="creeaza">
+  <div class="wrap">
+    <div>
+      <div class="head">
+        <h2>Finalizați comanda</h2>
+        <p>Alegeți planul și materialele, apoi completați datele. Administratorul vă contactează pentru confirmare și detaliile de plată. Încărcarea fotografiilor nu este disponibilă încă.</p>
+      </div>
+      <div class="recap" aria-hidden="true">
+        <div><svg><use href="#i-phone"/></svg><span>Invitații scanează cu telefonul, fără aplicație.</span></div>
+        <div><svg><use href="#i-folder"/></svg><span>Pozele ajung toate într-un singur album.</span></div>
+        <div><svg><use href="#i-truck"/></svg><span>Materialele tipărite ajung la voi înainte de nuntă.</span></div>
+      </div>
+    </div>
+
+    <form id="req-form" method="post" action="https://formsubmit.co/danscutari04@gmail.com">
+<noscript><p>Activați JavaScript pentru a trimite cererea sau scrieți la danscutari04@gmail.com.</p></noscript>
+<input name="_honey" type="text" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="row">
+        <div><label for="mireasa">Numele miresei</label><input type="text" id="mireasa" maxlength="80" name="mireasa" autocomplete="off"></div>
+        <div><label for="mire">Numele mirelui</label><input type="text" id="mire" maxlength="80" name="mire" autocomplete="off"></div>
+      </div>
+      <div><label for="eveniment">Denumirea evenimentului *</label><input id="eveniment" name="eveniment" type="text" required maxlength="120" placeholder="Nunta Ana și Mihai"></div>
+<div><label for="locatia">Locația evenimentului *</label><input id="locatia" name="locatia" type="text" required maxlength="200" placeholder="Localitatea și sala / restaurantul"></div>
+<div><label for="data">Data evenimentului *</label><input type="date" id="data" name="data" required></div>
+
+      <fieldset>
+        <div class="legend">Planul dorit</div>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="plan" required value="esential"><span><b>Esențial</b><em>29€ · până la 50 invitați · 7 zile</em></span></label>
+          <label class="choice"><input type="radio" name="plan" required value="amintiri" checked><span><b>Amintiri</b><em>69€ · până la 100 invitați · 15 zile</em></span></label>
+          <label class="choice"><input type="radio" name="plan" required value="poveste"><span><b>Poveste</b><em>99€ · 150–300 invitați · 60 zile</em></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="legend">Materiale tipărite</div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="gift" name="stickere_cadou" checked><span><b>Vreau stickerele cadou (<span id="gift-n">20</span> bucăți)</b><small>Sunt incluse în planul ales. Debifați dacă nu le doriți.</small></span></label>
+        </div>
+        <div style="margin-top:12px">
+          <label for="suporturi-input">Suporturi de masă (câte mese aveți)</label>
+          <input type="number" id="suporturi-input" name="suporturi" min="0" max="99" value="0" inputmode="numeric">
+        </div>
+      </fieldset>
+
+      <div class="delivery" id="delivery" hidden>
+        <div><label for="adresa">Adresa de livrare *</label><input type="text" id="adresa" maxlength="300" name="adresa" autocomplete="street-address" placeholder="Oraș, stradă, număr"></div>
+        <p class="note">Le trimitem înainte de eveniment, la adresa de mai sus. Detaliile despre livrare vi le spunem la confirmare.</p>
+      </div>
+
+      <div class="row">
+        <div><label for="email">Adresa voastră de email *</label><input type="email" id="email" maxlength="254" name="email" required autocomplete="email"></div>
+        <div><label for="telefon">Telefon (opțional)</label><input type="tel" id="telefon" maxlength="30" name="telefon" autocomplete="tel"></div>
+      </div>
+      <div><label for="mesaj">Observații (opțional)</label><textarea id="mesaj" maxlength="2000" name="mesaj" placeholder="Dacă aveți o mențiune pentru comandă, o puteți scrie aici."></textarea></div>
+
+      <div class="summary" id="summary" aria-live="polite"></div>
+
+      <label class="consent"><input type="checkbox" id="consent" name="consent" required><span>Sunt de acord să fiu contactat(ă) pentru această cerere. Am citit <a href="/confidentialitate.html">informațiile despre datele personale</a>.</span></label>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <button class="btn btn-primary" type="submit" id="submit" disabled>Trimite și continuă</button>
+      <p class="note">Cererea nu activează automat albumul. Plata, activarea și livrarea materialelor se stabilesc cu administratorul. Nu se încasează bani pe acest site momentan.</p>
     </form>
   </div>
 </section>
 
-<footer class="site-footer">QR Forever · <a href="/confidentialitate.html">Confidențialitate</a> · <a href="mailto:danscutari04@gmail.com">Contact</a></footer>
+</main>
 
+<footer>
+  <div class="wrap">
+    <span>QR Forever</span>
+    <span><a href="/confidentialitate.html">Confidențialitate</a> &nbsp;·&nbsp; <a href="mailto:danscutari04@gmail.com">Contact</a></span>
+  </div>
+</footer>
 
-
-<script src="/js/request.js"></script>
+<script src="/js/decorative-qr.js"></script><script src="/js/order-common.js"></script><script src="/js/order.js"></script>
 </body>
 </html>

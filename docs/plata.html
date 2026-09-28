@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plată — QR Forever</title>
+<style>
+:root{--ink:#24221f;--muted:#716c64;--paper:#faf8f4;--card:#fff;--line:#e8e1d7;--accent:#b98955;--accent-dark:#9d7040;--soft:#f3ede5;--ok:#35765b;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+header{padding:24px 0;border-bottom:1px solid var(--line);background:rgba(250,248,244,.94)}.nav{display:flex;align-items:center;justify-content:space-between}.brand{font-family:Georgia,serif;font-size:25px;font-weight:700;letter-spacing:-.5px}.brand span{color:var(--accent)}
+main{padding:58px 0 90px}.eyebrow{text-align:center;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--accent-dark);font-weight:700}.hero{text-align:center;max-width:680px;margin:0 auto 36px}.hero h1{font-family:Georgia,serif;font-size:clamp(36px,6vw,54px);line-height:1.05;margin:10px 0 14px}.hero p{color:var(--muted);font-size:17px;margin:0}
+.grid{display:grid;grid-template-columns:1fr 1.18fr;gap:22px;align-items:start}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 12px 40px rgba(52,43,32,.05)}.card h2{font-family:Georgia,serif;margin:0 0 20px;font-size:25px}.summary-row{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line);color:var(--muted)}.summary-row strong{color:var(--ink);font-weight:650;text-align:right}.summary-total{display:flex;justify-content:space-between;align-items:end;padding-top:20px;font-size:18px}.summary-total strong{font-size:32px;font-family:Georgia,serif}.note{background:var(--soft);border-radius:14px;padding:13px 15px;color:var(--muted);font-size:13px;margin-top:20px}
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.method{position:relative;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:15px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}.method.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(185,137,85,.1)}.method b{display:block;font-size:15px}.method span{font-size:12px;color:var(--muted)}.method .check{display:none;position:absolute;right:12px;top:12px;color:var(--accent-dark)}.method.active .check{display:block}
+label{display:block;font-size:13px;font-weight:650;margin:0 0 7px}.field{margin-bottom:16px}input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;font:inherit;color:var(--ink);background:#fff;outline:none}input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(185,137,85,.1)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.secure{display:flex;gap:9px;align-items:center;color:var(--muted);font-size:12px;margin:4px 0 18px}.secure svg{width:17px;height:17px;flex:none}
+.btn{width:100%;border:0;border-radius:12px;padding:15px 18px;background:var(--accent);color:white;font-weight:750;font-size:15px;cursor:pointer}.btn:hover{background:var(--accent-dark)}.mia-box{display:none;text-align:center}.mia-box.show{display:block}.mia-icon{width:72px;height:72px;border-radius:20px;background:#111;color:#fff;margin:3px auto 16px;display:grid;place-items:center;font-size:19px;font-weight:800}.mia-box h3{font-family:Georgia,serif;font-size:24px;margin:0 0 7px}.mia-box p{color:var(--muted);font-size:14px;margin:0 auto 20px;max-width:430px}.mia-button{display:inline-flex;width:100%;justify-content:center;align-items:center;border-radius:12px;padding:15px 18px;background:#111;color:#fff;text-decoration:none;font-weight:750}.mia-qr{margin:18px auto 0;border:1px dashed var(--line);border-radius:14px;padding:14px;color:var(--muted);font-size:12px;display:none}.mia-qr img{display:block;width:170px;height:170px;object-fit:contain;margin:0 auto 8px}
+.success{display:none;text-align:center;padding:18px}.success.show{display:block}.success .mark{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#e9f3ed;color:var(--ok);font-size:28px;margin:0 auto 15px}.success h3{font-family:Georgia,serif;font-size:27px;margin:0 0 8px}.success p{color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:12px;padding:0 0 35px}
+@media(max-width:780px){main{padding-top:38px}.grid{grid-template-columns:1fr}.card{padding:22px}.hero h1{font-size:40px}}
+</style>
+<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/payment-theme.css"></head>
+<body>
+<header><div class="wrap nav"><div class="brand">QR <span>Forever</span></div><div style="font-size:13px;color:var(--muted)">Confirmarea cererii</div></div></header>
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <div class="eyebrow">Ultimul pas</div>
+      <h1>Verificați cererea voastră</h1>
+      <p>Verificați planul și materialele alese. Administratorul vă contactează pentru a confirma disponibilitatea, plata și livrarea.</p>
+    </div>
+    <p id="missing-order" class="note" hidden>Nu avem detaliile cererii în această filă. <a href="/#creeaza">Completați formularul</a> pentru a continua.</p><div class="grid" id="order-grid" hidden>
+      <section class="card">
+        <h2>Rezumatul comenzii</h2>
+        <div class="summary-row"><span>Eveniment</span><strong id="order-event"></strong></div><div class="summary-row"><span>Referință</span><strong id="order-reference"></strong></div><div class="summary-row"><span>Pachet</span><strong id="plan">Amintiri</strong></div>
+        <div class="summary-row"><span>Preț pachet</span><strong id="planPrice">69 €</strong></div>
+        <div class="summary-row"><span>Suporturi</span><strong id="stands">0 buc.</strong></div>
+        <div class="summary-row"><span>Cost suporturi</span><strong id="standsPrice">0 €</strong></div>
+        <div class="summary-row"><span>Stickere cadou</span><strong id="stickers"></strong></div><div class="summary-row"><span>Livrare</span><strong>Se confirmă separat</strong></div><div class="summary-total"><span>Total estimat</span><strong id="total">69 €</strong></div>
+        <div class="note">Nicio plată nu este încasată aici. Costul livrării, disponibilitatea și activarea albumului se confirmă separat. <a href="/#creeaza">Modifică cererea</a>.</div>
+      </section>
+
+      <section class="card">
+        <h2>Cum preferați să plătiți?</h2>
+        <div class="methods">
+          <button class="method active" aria-pressed="true" type="button" data-method="card"><b>💳 Card bancar</b><span>Visa / Mastercard</span><span class="check">✓</span></button>
+          <button class="method" aria-pressed="false" type="button" data-method="mia"><b>⚡ MIA</b><span>Plată din aplicația băncii</span><span class="check">✓</span></button>
+        </div>
+
+        <div id="cardPanel"><h3>Card bancar</h3><p>Administratorul vă va comunica opțiunile disponibile după confirmarea cererii. Nu introduceți și nu trimiteți datele cardului prin acest site sau email.</p></div>
+        <div id="miaPanel" hidden><h3>MIA</h3><p>Spuneți-ne că preferați MIA. Administratorul va confirma dacă această opțiune este disponibilă și vă va transmite instrucțiunile de plată.</p></div>
+        <p class="note">Alegerea de mai sus este o preferință, nu o plată. Nu se debitează niciun cont.</p>
+        <p id="payment-status" role="status" aria-live="polite"></p><button class="btn" id="confirm-order" type="button">Confirmă cererea</button>
+
+      </section>
+    </div>
+  </div>
+</main>
+<footer>QR Forever · <a href="/confidentialitate.html">Confidențialitate</a> · <a href="mailto:danscutari04@gmail.com">Contact</a></footer>
+<script src="/js/order-common.js"></script><script src="/js/payment.js"></script>
+</body>
+</html>
