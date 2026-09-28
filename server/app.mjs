@@ -1,4 +1,5 @@
 import express from "express";
+import { registerDownloads } from "./downloads.mjs";
 import multer from "multer";
 import sharp from "sharp";
 import { DatabaseSync } from "node:sqlite";
@@ -14,6 +15,7 @@ import { hash, passwordMatches, seal, unseal } from "./security.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fail = (status, message) => Object.assign(new Error(message), { status });
 const MB = 1024 * 1024;
+const EXPIRY_GRACE_MS = 3 * 24 * 3600000;
 sharp.cache({ memory: 16, files: 0, items: 50 });
 sharp.concurrency(1);
 export function createImageGate(capacity) {
@@ -63,6 +65,9 @@ export async function createApp({
     CREATE INDEX IF NOT EXISTS photo_event ON photos(event_id,state,created,id);
     CREATE INDEX IF NOT EXISTS event_expiry ON events(expires);
     CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, count INTEGER NOT NULL, reset INTEGER NOT NULL);`);
+  // Additive migration keeps existing production albums and photo rows intact.
+  if (!db.prepare("PRAGMA table_info(photos)").all().some(column => column.name === "description"))
+    db.exec("ALTER TABLE photos ADD COLUMN description TEXT NOT NULL DEFAULT ''");
   const app = express();
   app.disable("x-powered-by");
   if (env.TRUST_PROXY === "1") app.set("trust proxy", 1);
@@ -76,7 +81,7 @@ export async function createApp({
     if (req.path.startsWith("/api/")) res.set("Cache-Control", "no-store");
     next();
   });
-  app.use("/api", express.json({ limit: "32kb" }));
+  app.use("/api", express.json({ limit: "64kb" }));
   app.use("/api", (req, res, next) => {
     if (
       !["GET", "HEAD", "OPTIONS"].includes(req.method) &&
@@ -121,6 +126,7 @@ export async function createApp({
       .get(id);
   function view(e) {
     const c = counts(e.id);
+    const expiry = Date.parse(e.expires), deletion = expiry + EXPIRY_GRACE_MS;
     return {
       id: e.id,
       name: e.name,
@@ -130,6 +136,10 @@ export async function createApp({
       quotaBytes: e.quota,
       maxPhotos: e.max_photos,
       expiresAt: e.expires,
+      deletionAt: new Date(deletion).toISOString(),
+      expired: now() >= expiry,
+      inGracePeriod: now() >= expiry && now() < deletion,
+      retentionStatus: now() < expiry ? "active" : now() < deletion ? "grace" : "deletion_due",
       disabled: !!e.disabled,
       usedBytes: c.bytes,
       photoCount: db
@@ -206,6 +216,7 @@ export async function createApp({
   const photoView = (p) => ({
     id: p.id,
     name: p.name,
+    description: p.description || "",
     bytes: p.bytes,
     createdAt: p.created,
   });
@@ -270,16 +281,20 @@ export async function createApp({
     });
     res.json({ ok: true });
   });
-  app.get("/api/admin/events", (req, res) =>
-    res.json({
-      events: db
-        .prepare(
-          "SELECT * FROM events ORDER BY created DESC,id DESC LIMIT 1000",
-        )
-        .all()
-        .map(view),
-    }),
-  );
+  app.get("/api/admin/events", (req, res, next) => {
+    try {
+      const offset = req.query.offset === undefined ? 0 : Number(req.query.offset);
+      const limit = req.query.limit === undefined ? 250 : Number(req.query.limit);
+      if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isInteger(limit) || limit < 1 || limit > 250 ||
+          (req.query.offset !== undefined && !/^\d+$/.test(req.query.offset)) ||
+          (req.query.limit !== undefined && !/^\d+$/.test(req.query.limit)))
+        throw fail(400, "Pagina evenimentelor este invalidă.");
+      const rows = db.prepare("SELECT * FROM events ORDER BY created DESC,id DESC LIMIT ? OFFSET ?").all(limit + 1, offset);
+      const more = rows.length > limit;
+      rows.length = Math.min(rows.length, limit);
+      res.json({events: rows.map(view), nextOffset: more ? offset + limit : null});
+    } catch (error) { next(error); }
+  });
   app.post("/api/admin/events", (req, res, next) => {
     try {
       const b = req.body,
@@ -343,7 +358,8 @@ export async function createApp({
       if (b.expiresAt !== undefined) {
         if (
           typeof b.expiresAt !== "string" ||
-          !Number.isFinite(Date.parse(b.expiresAt))
+          !Number.isFinite(Date.parse(b.expiresAt)) ||
+          !Number.isFinite(new Date(Date.parse(b.expiresAt) + EXPIRY_GRACE_MS).getTime())
         )
           throw fail(400, "Data expirării este invalidă.");
         exp = new Date(b.expiresAt).toISOString();
@@ -436,6 +452,9 @@ export async function createApp({
     },
   );
   app.use("/api/album", guest);
+  registerDownloads({app, db, storage, requireStorage, now, rate,
+    capacity: resourceLimit("MAX_ARCHIVE_CONCURRENCY", 1, 1, 2),
+    maxFiles: resourceLimit("MAX_ARCHIVE_FILES", 10000, 1, 50000)});
   app.get("/api/album", (req, res) => {
     const e = view(req.event);
     delete e.id;
@@ -450,7 +469,7 @@ export async function createApp({
   });
   const upload = multer({
     dest: tmp,
-    limits: { fileSize: maxFileBytes, files: 1, fields: 0, parts: 1 },
+    limits: { fileSize: maxFileBytes, files: 1, fields: 1, parts: 2, fieldSize: 4000 },
   }).single("photo");
   const activeUploads = new Set();
   let uploadSlots = 0;
@@ -504,6 +523,12 @@ export async function createApp({
         stored = false;
       try {
         if (!req.file) throw fail(400, "Selectați o fotografie.");
+        if (Object.keys(req.body || {}).some(key => key !== "description") ||
+            (req.body?.description !== undefined && typeof req.body.description !== "string"))
+          throw fail(400, "Descrierea fotografiei este invalidă.");
+        const description = (req.body?.description || "").trim();
+        if (description.length > 500)
+          throw fail(400, "Descrierea poate avea cel mult 500 de caractere.");
         releaseImage = acquireImage();
         const metadata = await sharp(req.file.path, {
           limitInputPixels: maxImagePixels,
@@ -532,6 +557,7 @@ export async function createApp({
         p = {
           id,
           event_id: req.event.id,
+          description,
           name:
             path
               .basename(req.file.originalname)
@@ -559,7 +585,7 @@ export async function createApp({
           )
             throw fail(409, "Limita albumului a fost atinsă.");
           db.prepare(
-            "INSERT INTO photos VALUES (?,?,?,?,?,?,?,'pending',?)",
+            "INSERT INTO photos (id,event_id,name,bytes,key,version,type,state,created,description) VALUES (?,?,?,?,?,?,?,'pending',?,?)",
           ).run(
             p.id,
             p.event_id,
@@ -569,6 +595,7 @@ export async function createApp({
             null,
             p.type,
             p.created,
+            p.description,
           );
           db.exec("COMMIT");
         } catch (e) {
@@ -777,7 +804,7 @@ export async function createApp({
           "SELECT p.* FROM photos p JOIN events e ON e.id=p.event_id WHERE p.state='deleting' OR e.expires<=? OR (p.state='pending' AND p.created<?)",
         )
         .all(
-          iso(),
+          new Date(now() - EXPIRY_GRACE_MS).toISOString(),
           new Date(now() - (startup ? -1 : 2 * 3600000)).toISOString(),
         );
       for (const p of pending) {
@@ -794,7 +821,7 @@ export async function createApp({
             new Date(now() - (startup ? -1 : 2 * 3600000)).toISOString();
         if (
           current.state !== "deleting" &&
-          current.expires > iso() &&
+          Date.parse(current.expires) + EXPIRY_GRACE_MS > now() &&
           !stalePending
         )
           continue;

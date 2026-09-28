@@ -3,6 +3,8 @@
   const $ = (id) => document.getElementById(id);
   let qrBlob = "",
     guestUrl = "";
+  let allEvents = [];
+  let listing = null;
   const previews = [];
   let previewBusy = false;
   function nextPreview() {
@@ -41,6 +43,9 @@
     $("logout").hidden = !active;
     if (!active) {
       $("events").replaceChildren();
+      allEvents = [];
+      $("overview-rows").replaceChildren();
+      $("overview-stats").replaceChildren();
       $("qr-panel").hidden = true;
       guestUrl = "";
       $("qr").replaceChildren();
@@ -179,6 +184,8 @@
         node("p", photo.name),
         node("p", bytes(photo.bytes) + " · " + date(photo.createdAt), "muted"),
       );
+      if (photo.description)
+        card.append(node("p", photo.description, "admin-photo-description"));
       card.append(
         button(
           "Șterge fotografia",
@@ -222,6 +229,8 @@
     const card = node("article", undefined, "card event-card"),
       top = node("div", undefined, "row between"),
       expired = Date.parse(event.expiresAt) <= Date.now();
+    card.id = "event-" + event.id;
+    card.tabIndex = -1;
     top.append(
       node("h3", event.name),
       node(
@@ -245,6 +254,16 @@
         "event-stats",
       ),
     );
+    if (event.deletionAt)
+      card.append(
+        node(
+          "p",
+          "Ștergere automată programată: " +
+            date(event.deletionAt) +
+            (expired ? " · Accesul invitaților este închis." : ""),
+          "event-stats",
+        ),
+      );
     const progress = node("div", undefined, "progress"),
       bar = node("span");
     bar.style.width =
@@ -330,7 +349,7 @@
         if (
           Date.parse(f.expiresAt.value) <= Date.now() &&
           !confirm(
-            "Această dată expiră imediat albumul și programează ștergerea fotografiilor. Continuați?",
+            "Această dată expiră imediat accesul la album. Fotografiile se șterg după 3 zile de la expirare; dacă termenul a trecut, ștergerea poate începe imediat. Continuați?",
           )
         )
           return;
@@ -371,28 +390,194 @@
     card.append(media);
     return card;
   }
-  async function listEvents() {
-    const result = await api("/events");
-    if (result.events?.length) storageState(result.events[0].storageConfigured);
+  function eventState(event) {
+    const expired = Date.parse(event.expiresAt) <= Date.now();
+    const deletionAt = event.deletionAt ? Date.parse(event.deletionAt) : null;
+    if (expired) {
+      if (deletionAt && deletionAt > Date.now())
+        return { label: "Expirat · 3 zile de păstrare", kind: "grace" };
+      return {
+        label:
+          event.usedBytes > 0
+            ? "Ștergere programată"
+            : "Expirat · fără fotografii",
+        kind: "due",
+      };
+    }
+    if (event.disabled) return { label: "Dezactivat", kind: "disabled" };
+    if (Date.parse(event.expiresAt) <= Date.now() + 7 * 86400000)
+      return { label: "Expiră în curând", kind: "soon" };
+    return { label: "Activ", kind: "active" };
+  }
+  function renderOverview() {
+    const query = $("event-search").value.trim().toLocaleLowerCase("ro");
+    const filter = $("event-filter").value;
+    const visible = allEvents.filter((event) => {
+      const state = eventState(event);
+      const matches =
+        !query ||
+        [event.name, event.location]
+          .filter(Boolean)
+          .join(" ")
+          .toLocaleLowerCase("ro")
+          .includes(query);
+      return (
+        matches &&
+        (filter === "all" ||
+          (filter === "stored" && event.usedBytes > 0) ||
+          (filter === "active" &&
+            !event.disabled &&
+            Date.parse(event.expiresAt) > Date.now()) ||
+          (filter === "disabled" && event.disabled) ||
+          state.kind === filter)
+      );
+    });
+    const sort = $("event-sort").value;
+    visible.sort((a, b) =>
+      sort === "storage"
+        ? b.usedBytes - a.usedBytes
+        : sort === "recent"
+          ? Date.parse(b.createdAt) - Date.parse(a.createdAt)
+          : sort === "name"
+            ? a.name.localeCompare(b.name, "ro")
+            : Number(Date.parse(a.expiresAt) <= Date.now()) -
+                Number(Date.parse(b.expiresAt) <= Date.now()) ||
+              Date.parse(a.expiresAt) - Date.parse(b.expiresAt),
+    );
+    $("overview-count").textContent =
+      `${visible.length} din ${allEvents.length} albume`;
+    $("overview-rows").replaceChildren();
     $("events").replaceChildren();
-    for (const event of result.events || [])
-      $("events").append(renderEvent(event));
-    if (!(result.events || []).length)
-      $("events").append(
+    observer.disconnect();
+    previews.length = 0;
+    for (const event of visible) {
+      const row = node("tr"),
+        name = node("td"),
+        storage = node("td"),
+        expiration = node("td"),
+        deletion = node("td"),
+        status = node("td"),
+        action = node("td");
+      name.append(
+        node("strong", event.name),
+        node("small", event.location || "Locație nespecificată"),
+      );
+      storage.append(
+        node("strong", `${event.photoCount || 0} fotografii`),
         node(
-          "p",
-          "Încă nu sunt evenimente. Creați primul album mai sus.",
-          "empty",
+          "small",
+          `${bytes(event.usedBytes || 0)} / ${bytes(event.quotaBytes || 0)}`,
         ),
       );
+      expiration.append(node("time", date(event.expiresAt)));
+      expiration.firstChild.dateTime = event.expiresAt;
+      if (event.deletionAt) {
+        deletion.append(node("time", date(event.deletionAt)));
+        deletion.firstChild.dateTime = event.deletionAt;
+      } else deletion.textContent = "—";
+      const state = eventState(event);
+      status.append(node("span", state.label, "badge status-" + state.kind));
+      if (event.disabled && !["active", "disabled"].includes(state.kind))
+        status.append(node("small", "Dezactivat"));
+      action.append(
+        button("Gestionează", () => {
+          const card = $("event-" + event.id);
+          card.scrollIntoView({
+            block: "start",
+            behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "auto"
+              : "smooth",
+          });
+          card.focus({ preventScroll: true });
+        }),
+      );
+      row.append(name, storage, expiration, deletion, status, action);
+      $("overview-rows").append(row);
+      $("events").append(renderEvent(event));
+    }
+    if (!visible.length) {
+      const row = node("tr"),
+        cell = node(
+          "td",
+          allEvents.length
+            ? "Niciun album nu corespunde filtrelor."
+            : "Nu există încă albume. Creează primul eveniment mai jos.",
+          "empty",
+        );
+      cell.colSpan = 6;
+      row.append(cell);
+      $("overview-rows").append(row);
+    }
+    $("overview-stats").replaceChildren();
+    for (const [value, label] of [
+      [allEvents.filter((e) => e.usedBytes > 0).length, "albume cu fotografii"],
+      [
+        bytes(allEvents.reduce((sum, e) => sum + (e.usedBytes || 0), 0)),
+        "spațiu folosit",
+      ],
+      [
+        allEvents.filter((e) => eventState(e).kind === "soon").length,
+        "expiră în următoarele 7 zile",
+      ],
+    ]) {
+      const stat = node("div", undefined, "overview-stat");
+      stat.append(node("strong", String(value)), node("span", label));
+      $("overview-stats").append(stat);
+    }
   }
+  async function listEvents() {
+    if (listing) return listing;
+    listing = (async () => {
+      $("reload").disabled = true;
+      $("overview-count").textContent = "Se încarcă toate albumele…";
+      const fetched = new Map();
+      let offset = 0;
+      try {
+        for (;;) {
+          const result = await api("/events?offset=" + offset + "&limit=250");
+          for (const event of result.events || []) fetched.set(event.id, event);
+          $("overview-count").textContent = `${fetched.size} albume încărcate…`;
+          if (result.nextOffset === null || result.nextOffset === undefined)
+            break;
+          if (
+            !Number.isSafeInteger(result.nextOffset) ||
+            result.nextOffset <= offset
+          )
+            throw new Error(
+              "Lista albumelor nu a putut fi încărcată complet. Încercați din nou.",
+            );
+          offset = result.nextOffset;
+        }
+        allEvents = [...fetched.values()];
+        if (allEvents.length) storageState(allEvents[0].storageConfigured);
+        renderOverview();
+      } catch (error) {
+        $("overview-count").textContent =
+          "Actualizarea listei nu a reușit. Apăsați Actualizează.";
+        throw error;
+      } finally {
+        $("reload").disabled = false;
+      }
+    })();
+    try {
+      return await listing;
+    } finally {
+      listing = null;
+    }
+  }
+  $("event-search").addEventListener("input", renderOverview);
+  $("event-filter").addEventListener("change", renderOverview);
+  $("event-sort").addEventListener("change", renderOverview);
   $("login-form").onsubmit = async (e) => {
     e.preventDefault();
     const b = e.currentTarget.querySelector("button");
     b.disabled = true;
     notice();
     try {
-      await api("/login", "POST", { username: $("username").value.trim(), password: $("password").value });
+      await api("/login", "POST", {
+        username: $("username").value.trim(),
+        password: $("password").value,
+      });
       $("password").value = "";
       auth(true);
       storageState((await api("/session")).storageConfigured);

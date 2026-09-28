@@ -407,3 +407,189 @@ main.wrap > section + section {
 #content > section + section {
   margin-top: 36px;
 }
+
+/* Private administrator overview; guest gallery styles remain independent. */
+.admin-page .admin-overview {
+  scroll-margin-top: 20px;
+}
+.admin-page .admin-overview h2 {
+  margin-bottom: 7px;
+}
+.admin-page .admin-overview .toolbar p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.admin-page .overview-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.admin-page .overview-stat {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.admin-page .overview-stat strong {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 1.9rem;
+  line-height: 1.2;
+}
+.admin-page .overview-stat span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.admin-page .overview-filters {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.admin-page .overview-filters .field {
+  font-size: 0.84rem;
+}
+.admin-page .overview-filters input,
+.admin-page .overview-filters select {
+  background: white;
+  font-size: 0.9rem;
+}
+.admin-page #overview-count {
+  font-size: 0.85rem;
+  margin: 0 0 10px;
+}
+.admin-page .overview-table-wrap {
+  overflow: auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.admin-page .overview-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+  text-align: left;
+  font-size: 0.86rem;
+}
+.admin-page .overview-table th {
+  padding: 15px 14px;
+  background: #eee9ff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  vertical-align: bottom;
+}
+.admin-page .overview-table td {
+  padding: 17px 14px;
+  border-top: 1px solid #ece8f5;
+  vertical-align: middle;
+}
+.admin-page .overview-table td:first-child {
+  min-width: 190px;
+  max-width: 260px;
+  overflow-wrap: anywhere;
+}
+.admin-page .overview-table small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.admin-page .overview-table time {
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+.admin-page .overview-table .btn {
+  font-size: 0.78rem;
+  min-height: 38px;
+  padding: 8px 13px;
+}
+.admin-page .overview-table .badge {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  max-width: 140px;
+}
+.admin-page .status-active {
+  background: #ddf4e5;
+  color: #175330;
+}
+.admin-page .status-soon,
+.admin-page .status-grace {
+  background: #fff0ce;
+  color: #795312;
+}
+.admin-page .status-due,
+.admin-page .status-disabled {
+  background: #fbe3e3;
+  color: #842828;
+}
+.admin-page .overview-note {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 850px;
+  margin: 13px 0 0;
+}
+.admin-page .event-card {
+  scroll-margin-top: 24px;
+}
+.admin-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 720px) {
+  .admin-page .overview-stats {
+    gap: 8px;
+  }
+  .admin-page .overview-stat {
+    padding: 14px 11px;
+  }
+  .admin-page .overview-stat strong {
+    font-size: 1.5rem;
+  }
+  .admin-page .overview-stat span {
+    font-size: 0.73rem;
+  }
+  .admin-page .overview-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-page .overview-filters label:first-child {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 420px) {
+  .admin-page .overview-filters {
+    grid-template-columns: 1fr;
+  }
+  .admin-page .overview-stat strong {
+    font-size: 1.3rem;
+  }
+}
+
+.admin-page .admin-photo-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.admin-page .overview-scroll-hint { display: none; font-size: .78rem; }
+@media (max-width: 1000px) { .admin-page .overview-scroll-hint { display: block; } }
+.admin-page #workspace > *,
+.admin-page .admin-overview .toolbar > *,
+.admin-page .overview-table-wrap {
+  min-width: 0;
+}
+.admin-page .overview-table-wrap {
+  max-width: 100%;
+}
+.admin-page .overview-table-wrap {
+  position: relative;
+}

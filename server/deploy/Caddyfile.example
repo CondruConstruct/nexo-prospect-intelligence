@@ -1,4 +1,4 @@
-qr-forever.162-254-38-74.sslip.io {
+qr-forever.162-254-38-74.sslip.io, qrforever.md, www.qrforever.md {
     encode zstd gzip
     reverse_proxy 127.0.0.1:3000
 }

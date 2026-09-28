@@ -8,69 +8,124 @@
     <title>Albumul evenimentului — QR Forever</title>
     <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/app.css" />
+    <link rel="stylesheet" href="/album.css" />
   </head>
-  <body>
+  <body class="album-page">
     <nav class="app-nav">
-      <div class="wrap">
-        <a class="brand" href="/">QR Forever</a
-        ><span class="muted">Amintirile voastre, împreună</span>
+      <div class="album-wrap">
+        <a class="brand" href="/">QR <span>Forever</span></a
+        ><span class="nav-note">Amintirile voastre, împreună</span>
       </div>
     </nav>
-    <main class="wrap">
-      <header class="page-head">
-        <p class="eyebrow">Albumul evenimentului</p>
-        <h1 id="title">Bine ai venit</h1>
-        <p id="details" class="lead"></p>
+    <main class="album-wrap">
+      <header class="album-heading">
+        <h1 id="title">Albumul vostru</h1>
+        <p id="details"></p>
       </header>
       <p id="status" class="notice" role="status">Se deschide albumul…</p>
       <div id="content" hidden>
-        <section class="card">
-          <div class="row">
+        <section class="upload-strip" aria-labelledby="upload-heading">
+          <div>
+            <h2 id="upload-heading">Încarcă fotografii</h2>
+            <p>O clipă a ta. O amintire pentru toți.</p>
+          </div>
+          <button
+            id="upload-button"
+            class="upload-plus"
+            aria-label="Adaugă fotografii"
+            title="Adaugă fotografii"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg></button
+          ><input
+            id="photos"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            hidden
+          />
+        </section>
+        <div
+          id="upload-progress"
+          class="upload-feedback"
+          role="status"
+          hidden
+        ></div>
+        <ul id="upload-results" class="upload-errors" aria-live="polite"></ul>
+        <section class="gallery-section" aria-labelledby="gallery-heading">
+          <div class="gallery-tools">
             <div>
-              <h2>Adaugă o amintire</h2>
-              <p>
-                Toți invitații cu acest link pot vedea și descărca fotografiile.
-                Numai administratorul le poate șterge.
-              </p>
+              <h2 id="gallery-heading">Fotografiile voastre</h2>
+              <p id="photo-count" class="muted"></p>
+            </div>
+            <div class="gallery-actions">
+              <button
+                class="quiet-button"
+                id="refresh"
+                aria-label="Actualizează albumul"
+                title="Actualizează albumul"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M20 7v5h-5M4 17v-5h5M19 10a7 7 0 0 0-12-4L4 9m16 6-3 3A7 7 0 0 1 5 14"
+                  />
+                </svg></button
+              ><button
+                class="quiet-button"
+                id="select-mode"
+                aria-pressed="false"
+              >
+                Selectează</button
+              ><button class="btn" id="download-all">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5" /></svg
+                ><span>Descarcă toate</span>
+              </button>
             </div>
           </div>
-          <form id="upload-form" class="stack">
-            <label class="field" for="photos"
-              >Alege fotografii<input
-                id="photos"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                required
-            /></label>
-            <p class="muted">
-              JPEG, PNG sau WebP · maximum <span id="file-limit">200 MB</span> și <span id="pixel-limit">80</span> megapixeli/fotografie.
-              Originalele pot conține informații despre locație; elimină-le
-              înainte de încărcare dacă nu dorești să le distribui.
-            </p>
-            <div class="row">
-              <button class="btn" id="upload-button">
-                Încarcă fotografiile</button
-              ><span id="capacity" class="muted"></span>
-            </div>
-          </form>
-          <div id="upload-progress" class="notice" role="status" hidden></div>
-          <ul id="upload-results" aria-live="polite"></ul>
+          <div id="selection-bar" class="selection-bar" hidden>
+            <button
+              id="clear-selection"
+              class="quiet-button"
+              aria-label="Închide selecția"
+            >
+              <span aria-hidden="true">×</span></button
+            ><strong id="selection-count" role="status"
+              >Selectează fotografii</strong
+            ><button id="select-all" class="quiet-button">
+              Selectează cele afișate</button
+            ><button id="download-selected" class="btn" disabled>
+              Descarcă selecția
+            </button>
+          </div>
+          <div id="gallery" class="album-grid"></div>
+          <div id="empty" class="album-empty" hidden>
+            <span class="empty-spark" aria-hidden="true">✧</span>
+            <h3>Prima amintire începe cu tine.</h3>
+            <p>Apasă pe + și adaugă fotografiile de la eveniment.</p>
+          </div>
+          <div class="more-row">
+            <button id="more" class="btn secondary" hidden>
+              Mai multe fotografii
+            </button>
+          </div>
         </section>
-        <section aria-labelledby="gallery-heading">
-          <div class="page-head row">
-            <h2 id="gallery-heading">Fotografiile voastre</h2>
-            <button class="btn secondary" id="refresh">Actualizează</button>
-          </div>
-          <div id="gallery" class="photo-grid"></div>
-          <p id="empty" class="empty" hidden>
-            Albumul așteaptă prima fotografie. Încarcă o amintire de la
-            eveniment!
+        <details class="album-info">
+          <summary>Despre acest album</summary>
+          <p id="capacity"></p>
+          <p id="retention"></p>
+          <p>
+            JPEG, PNG sau WebP, maximum <span id="file-limit">200 MB</span> și
+            <span id="pixel-limit">24</span> megapixeli/fotografie.
           </p>
-          <button id="more" class="btn secondary" hidden>
-            Mai multe fotografii
-          </button>
-        </section>
+          <p>
+            Invitații cu acest link pot vedea și descărca fotografiile. Numai
+            administratorul le poate șterge. Originalele pot conține informații
+            despre locație; elimină-le înainte de încărcare dacă nu dorești să
+            le distribui.
+          </p>
+        </details>
       </div>
       <noscript
         ><p class="notice">
@@ -78,22 +133,62 @@
         </p></noscript
       >
     </main>
-    <dialog id="preview">
-      <button id="close-preview" class="btn secondary" autofocus>
-        Închide
-      </button>
-      <p id="preview-name"></p>
-      <img
-        id="preview-image"
-        alt="Fotografia selectată"
-        style="max-width: 100%; max-height: 75vh; object-fit: contain"
-      />
+    <dialog id="upload-dialog" class="upload-dialog" aria-labelledby="upload-dialog-title">
+      <form id="upload-confirm">
+        <h2 id="upload-dialog-title">Adaugă amintiri</h2>
+        <p id="upload-file-count"></p>
+        <label for="photo-description">Descriere (opțional)</label>
+        <textarea id="photo-description" maxlength="500" rows="3" placeholder="Povestește puțin despre acest moment…"></textarea>
+        <p class="muted">Descrierea apare sub fiecare fotografie selectată. Maximum 500 de caractere.</p>
+        <div class="upload-dialog-actions">
+          <button type="button" id="cancel-upload" class="btn secondary">Renunță</button>
+          <button type="submit" class="btn">Încarcă fotografiile</button>
+        </div>
+      </form>
     </dialog>
-    <footer class="wrap muted">
-      <p>
-        QR Forever ·
-        <a href="mailto:danscutari04@gmail.com">Contact administrator</a>
-      </p>
+    <dialog
+      id="preview"
+      class="lightbox"
+      aria-label="Previzualizare fotografie"
+    >
+      <div class="lightbox-toolbar">
+        <button
+          id="close-preview"
+          class="lightbox-button"
+          autofocus
+          aria-label="Închide previzualizarea"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <p id="preview-count" role="status"></p>
+        <div class="lightbox-actions">
+          <button id="preview-original" class="lightbox-button">
+            Vezi originalul</button
+          ><button id="preview-download" class="lightbox-button">
+            Descarcă
+          </button>
+        </div>
+      </div>
+      <div class="lightbox-stage">
+        <button
+          id="preview-prev"
+          class="lightbox-arrow"
+          aria-label="Fotografia precedentă"
+        >
+          ‹</button
+        ><img id="preview-image" alt="Fotografie de la eveniment" /><button
+          id="preview-next"
+          class="lightbox-arrow"
+          aria-label="Fotografia următoare"
+        >
+          ›
+        </button>
+      </div>
+      <p id="preview-status" role="status"></p>
+    </dialog>
+    <footer class="album-wrap album-footer">
+      <span>Cu drag, QR Forever.</span
+      ><a href="mailto:danscutari04@gmail.com">Contact administrator</a>
     </footer>
     <script src="/album.js" defer></script>
   </body>

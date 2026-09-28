@@ -9,7 +9,7 @@
     <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/app.css" />
   </head>
-  <body>
+  <body class="admin-page">
     <header class="app-nav">
       <div class="wrap">
         <a class="brand" href="/">QR <span>Forever</span></a>
@@ -31,7 +31,14 @@
       <section id="login" class="card login-card" hidden>
         <h2>Conectare administrator</h2>
         <form id="login-form" class="stack">
-<label class="field">Utilizator<input id="username" name="username" autocomplete="username" value="admin" required></label>
+          <label class="field"
+            >Utilizator<input
+              id="username"
+              name="username"
+              autocomplete="username"
+              value="admin"
+              required
+          /></label>
           <label class="field"
             >Parola administratorului<input
               id="password"
@@ -53,7 +60,79 @@
           dar verificați încărcarea fotografiilor înainte de a distribui
           codurile QR.
         </p>
-        <section class="card">
+        <section
+          id="album-overview"
+          class="admin-overview"
+          aria-labelledby="overview-title"
+        >
+          <div class="row between toolbar">
+            <div>
+              <h2 id="overview-title">Clienți și albume</h2>
+              <p class="muted">
+                Fotografii păstrate, spațiu folosit și termenele fiecărui
+                eveniment.
+              </p>
+            </div>
+            <a class="btn secondary" href="#new-event">Creează un album</a>
+          </div>
+          <div id="overview-stats" class="overview-stats"></div>
+          <div class="overview-filters">
+            <label class="field"
+              >Caută un client sau eveniment<input
+                id="event-search"
+                type="search"
+                placeholder="Nume sau locație"
+                autocomplete="off"
+            /></label>
+            <label class="field"
+              >Afișează<select id="event-filter">
+                <option value="all">Toate albumele</option>
+                <option value="stored">Cu fotografii stocate</option>
+                <option value="active">Active</option>
+                <option value="soon">Expiră în 7 zile</option>
+                <option value="grace">Expirate — perioada de 3 zile</option>
+                <option value="due">Termen de ștergere depășit</option>
+                <option value="disabled">Dezactivate</option>
+              </select></label
+            >
+            <label class="field"
+              >Ordonează<select id="event-sort">
+                <option value="expiry">Expiră cel mai curând</option>
+                <option value="storage">Spațiu folosit</option>
+                <option value="recent">Cele mai noi</option>
+                <option value="name">Nume A–Z</option>
+              </select></label
+            >
+          </div>
+          <p id="overview-count" class="muted" role="status"></p>
+          <p class="overview-scroll-hint muted">Glisează tabelul spre stânga pentru termenele de expirare și ștergere.</p>
+          <div
+            class="overview-table-wrap"
+            tabindex="0"
+            role="region"
+            aria-label="Albumele clienților"
+          >
+            <table class="overview-table">
+              <thead>
+                <tr>
+                  <th scope="col">Client / eveniment</th>
+                  <th scope="col">Fotografii și spațiu</th>
+                  <th scope="col">Acces până la</th>
+                  <th scope="col">Ștergere automată</th>
+                  <th scope="col">Stare</th>
+                  <th scope="col"><span class="sr-only">Acțiuni</span></th>
+                </tr>
+              </thead>
+              <tbody id="overview-rows"></tbody>
+            </table>
+          </div>
+          <p class="overview-note">
+            Accesul invitaților se închide la expirare. Fotografiile sunt
+            programate pentru ștergere automată după încă 3 zile. Orele sunt
+            afișate în fusul orar al dispozitivului.
+          </p>
+        </section>
+        <section class="card" id="new-event">
           <h2>Creează un eveniment</h2>
           <form id="create-form" class="stack">
             <div class="grid two">
@@ -142,7 +221,7 @@
         </section>
         <section>
           <div class="row between toolbar">
-            <h2>Evenimentele voastre</h2>
+            <h2>Administrarea albumelor</h2>
             <button id="reload" class="btn secondary" type="button">
               Actualizează
             </button>

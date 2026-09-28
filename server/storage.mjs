@@ -78,12 +78,13 @@ export function createStorage(env = process.env, { client } = {}) {
       requestHandler: { connectionTimeout: 10000, requestTimeout: 300000 },
     });
   const Bucket = env.B2_BUCKET;
-  async function get(key, versionId) {
+  async function get(key, versionId, { signal } = {}) {
     ownedKey(key);
     if (!versionId || versionId === "null")
       throw failure("VERSION_ID_REQUIRED");
     const response = await sdk.send(
       new GetObjectCommand({ Bucket, Key: key, VersionId: versionId }),
+      { abortSignal: signal },
     );
     if (
       !response.Body ||

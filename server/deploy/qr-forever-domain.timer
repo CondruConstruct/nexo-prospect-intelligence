@@ -1,0 +1,11 @@
+[Unit]
+Description=Check QR Forever domain readiness every five minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=20s
+Unit=qr-forever-domain.service
+
+[Install]
+WantedBy=timers.target
