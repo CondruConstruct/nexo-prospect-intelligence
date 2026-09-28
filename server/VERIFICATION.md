@@ -1,5 +1,15 @@
 # Verification — 28 September 2026
 
+## Latest deployed gallery, admin and retention verification
+
+Production code `835ffcf` on the owner VPS passed real browser admin create/QR/logout, guest upload with description, original preview and ZIP download, plus admin overview, expiry edit, grace-period storage preservation with denied guest access, expiry extension, QR rotation, explicit photo deletion and disable. A QR decoder recovered the generated live URL; the ZIP original matched the uploaded fixture SHA-256. Only the newly created synthetic photo was deleted; existing owner photos were preserved.
+
+Local browser verified 12 mixed-aspect photos, select two/select displayed/clear, all-photo and selected-photo ZIP contents/CRC/SHA-256, literal text caption safety and hidden filenames. Public homepage/request/plan/payment-preference/thank-you flows, failure retries, editing and both payment preferences passed with intercepted provider responses: no real email sent in this test and inbox delivery remains a separate check. Payments remain preferences only.
+
+Phone/tablet/desktop widths 320/390/768/1440 were checked. Fixed admin overflow and fractional quota input validation; reviewed screenshots show no overlapping text in tested layouts. The 26-test backend suite passes, including deterministic 72-hour expiry deletion, migration, pagination, event isolation and archive cancellation/failure.
+
+Domain automation is installed and enabled, checking every five minutes. DNS for qrforever.md/apex and www was still pending at verification; actual new-domain HTTPS activation is not yet claimed. Source and existing live site remain on the temporary HTTPS hostname until readiness checks pass.
+
 ## Real Backblaze account
 
 The existing private bucket `Nuntitest1` was tested. No customer photographs were used.
