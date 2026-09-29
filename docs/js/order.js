@@ -36,7 +36,7 @@
    await Q.send(Q.payload(order),'QR Forever — cerere eveniment '+order.id);
    location.assign('/plata.html');
   }catch(error){$('status').className='status err';$('status').textContent=error.name==='TimeoutError'?'Confirmarea trimiterii întârzie. Verificați conexiunea; la reîncercare păstrăm aceeași referință.':error.message;$('status').scrollIntoView({block:'center',behavior:'smooth'});}
-  finally{busy=false;$('submit').disabled=false;$('submit').textContent='Trimite și continuă';}
+  finally{busy=false;$('submit').disabled=false;$('submit').textContent='Continuă comanda';}
  });
  $('submit').disabled=false;
 })();

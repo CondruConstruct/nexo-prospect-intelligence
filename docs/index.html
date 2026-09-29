@@ -85,13 +85,13 @@
       <div class="step">
         <div class="n">Pasul 1</div>
         <h3>Alegeți planul</h3>
-        <p>Alegeți pachetul potrivit și completați datele evenimentului.</p>
+        <p>Rezervați din timp: alegeți planul, data nunții și materialele dorite.</p>
         <span class="who">Voi</span>
       </div>
       <div class="step">
         <div class="n">Pasul 2</div>
-        <h3>Primiți codul și materialele</h3>
-        <p>Administratorul confirmă cererea, plata și activarea codului QR. Stabiliți împreună livrarea stickerelor și suporturilor.</p>
+        <h3>Pregătim totul pentru nuntă</h3>
+        <p>După confirmarea plății, primiți codul QR. Albumul standard este activat, iar stickerele și suporturile alese sunt pregătite cu câteva zile înainte de eveniment.</p>
         <span class="who">Voi și invitații</span>
       </div>
       <div class="step">
@@ -159,7 +159,7 @@
   <div class="wrap">
     <div class="head">
       <h2>Alegeți planul potrivit nunții voastre</h2>
-      <p>Prețuri per eveniment, confirmate de administrator. Toate planurile includ codul QR și stickere cadou, dacă le doriți. Limita propusă este de 200 MB per fișier, după activarea serviciului.</p>
+      <p>Toate planurile includ un album în format standard, codul QR și stickere cadou, dacă le doriți. Fotografii de până la 200 MB și 24 de megapixeli, în limita spațiului albumului.</p>
     </div>
 
     <div class="plans">
@@ -252,7 +252,7 @@
       </details>
       <details>
         <summary>Cum primesc albumul după eveniment?</summary>
-        <p>Toate pozele încărcate de invitați ajung în albumul vostru, într-un singur loc. Vă spunem exact cum le accesați când configurăm împreună evenimentul.</p>
+        <p>Deschideți linkul albumului sau scanați codul QR. Toate fotografiile sunt într-un singur loc: le puteți vedea și descărca individual, pe cele selectate sau pe toate odată.</p>
       </details>
       <details>
         <summary>Ce înseamnă „link activ 7, 15 sau 60 de zile”?</summary>
@@ -264,11 +264,11 @@
       </details>
       <details>
         <summary>Când este bine să fac rezervarea?</summary>
-        <p>Vă recomandăm să faceți rezervarea din timp, mai ales pentru evenimentele din perioadele aglomerate. Astfel, aveți locul asigurat și timp suficient pentru pregătirea materialelor.</p>
+        <p>Rezervați din timp, de îndată ce ați stabilit data nunții. Astfel, avem timp să pregătim stickerele și suporturile și să organizăm livrarea înainte de eveniment.</p>
       </details>
       <details>
-        <summary>Ce se întâmplă după trimitere?</summary>
-        <p>După trimiterea cererii, administratorul confirmă disponibilitatea, detaliile de plată și livrare. Codul QR și albumul se activează separat, după confirmare. Momentan nu se încasează plăți online.</p>
+        <summary>Ce se întâmplă după ce trimit comanda?</summary>
+        <p>Vă contactăm pentru confirmarea comenzii și detaliile de plată. După confirmarea plății, primiți codul QR. Albumul standard este activat, iar stickerele și suporturile alese sunt pregătite cu câteva zile înainte de eveniment; livrarea se stabilește astfel încât să le aveți la timp.</p>
       </details>
     </div>
   </div>
@@ -280,7 +280,7 @@
     <div>
       <div class="head">
         <h2>Finalizați comanda</h2>
-        <p>Alegeți planul și materialele, apoi completați datele. Administratorul vă contactează pentru confirmare și detaliile de plată. Încărcarea fotografiilor nu este disponibilă încă.</p>
+        <p>Alegeți planul și materialele, apoi completați data nunții și datele de contact. Albumul are un format standard, gata pentru fotografiile invitaților — fără setări sau personalizare din partea voastră.</p>
       </div>
       <div class="recap" aria-hidden="true">
         <div><svg><use href="#i-phone"/></svg><span>Invitații scanează cu telefonul, fără aplicație.</span></div>
@@ -296,8 +296,6 @@
         <div><label for="mireasa">Numele miresei</label><input type="text" id="mireasa" maxlength="80" name="mireasa" autocomplete="off"></div>
         <div><label for="mire">Numele mirelui</label><input type="text" id="mire" maxlength="80" name="mire" autocomplete="off"></div>
       </div>
-      <div><label for="eveniment">Denumirea evenimentului *</label><input id="eveniment" name="eveniment" type="text" required maxlength="120" placeholder="Nunta Ana și Mihai"></div>
-<div><label for="locatia">Locația evenimentului *</label><input id="locatia" name="locatia" type="text" required maxlength="200" placeholder="Localitatea și sala / restaurantul"></div>
 <div><label for="data">Data evenimentului *</label><input type="date" id="data" name="data" required></div>
 
       <fieldset>
@@ -329,15 +327,14 @@
         <div><label for="email">Adresa voastră de email *</label><input type="email" id="email" maxlength="254" name="email" required autocomplete="email"></div>
         <div><label for="telefon">Telefon (opțional)</label><input type="tel" id="telefon" maxlength="30" name="telefon" autocomplete="tel"></div>
       </div>
-      <div><label for="mesaj">Observații (opțional)</label><textarea id="mesaj" maxlength="2000" name="mesaj" placeholder="Dacă aveți o mențiune pentru comandă, o puteți scrie aici."></textarea></div>
 
       <div class="summary" id="summary" aria-live="polite"></div>
 
       <label class="consent"><input type="checkbox" id="consent" name="consent" required><span>Sunt de acord să fiu contactat(ă) pentru această cerere. Am citit <a href="/confidentialitate.html">informațiile despre datele personale</a>.</span></label>
 
       <div id="status" class="status" role="status" aria-live="polite"></div>
-      <button class="btn btn-primary" type="submit" id="submit" disabled>Trimite și continuă</button>
-      <p class="note">Cererea nu activează automat albumul. Plata, activarea și livrarea materialelor se stabilesc cu administratorul. Nu se încasează bani pe acest site momentan.</p>
+      <button class="btn btn-primary" type="submit" id="submit" disabled>Continuă comanda</button>
+      <p class="note">La pasul următor verificați planul, materialele și totalul estimat și alegeți preferința de plată. Folosiți o adresă de email corectă pentru informațiile comenzii și codul QR.</p>
     </form>
   </div>
 </section>
